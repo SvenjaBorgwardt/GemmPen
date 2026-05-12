@@ -11,10 +11,10 @@ import type { Highlight, UncertainSpan } from "@/lib/student-annotations";
 
 const ZOOM_LEVELS = [100, 125, 150, 200, 250];
 
-function ScanViewer({ scanUrl }: { scanUrl: string }) {
+function ScanViewer({ scanUrl, initialZoomIdx = 0 }: { scanUrl: string; initialZoomIdx?: number }) {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [baseWidth, setBaseWidth] = useState(0);
-  const [zoomIdx, setZoomIdx] = useState(0);
+  const [zoomIdx, setZoomIdx] = useState(initialZoomIdx);
   const zoom = ZOOM_LEVELS[zoomIdx];
   const [isPanning, setIsPanning] = useState(false);
   const panStart = useRef({ x: 0, y: 0, scrollLeft: 0, scrollTop: 0 });
@@ -292,12 +292,14 @@ const MIN_TRANSCRIPT_PX = 120;
 export function DocumentPanel({
   transcript,
   scanUrl,
+  initialZoomIdx,
   paragraphs,
   highlights,
   uncertainSpans,
 }: {
   transcript: string;
   scanUrl?: string;
+  initialZoomIdx?: number;
   paragraphs: string[];
   highlights: Highlight[];
   uncertainSpans: UncertainSpan[];
@@ -364,7 +366,7 @@ export function DocumentPanel({
       >
         <div style={{ position: "relative", height: "100%" }}>
           {scanUrl ? (
-            <ScanViewer scanUrl={scanUrl} />
+            <ScanViewer scanUrl={scanUrl} initialZoomIdx={initialZoomIdx} />
           ) : (
             <SimulatedScan transcript={transcript} />
           )}

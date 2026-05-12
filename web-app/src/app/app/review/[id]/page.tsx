@@ -33,6 +33,10 @@ export default async function ReviewPage({
     "casey-r": "/scans/casey-r.jpg",
   };
   const scanUrl = scanUrls[id];
+  const initialZoomOverrides: Record<string, number> = {
+    "casey-r": 1,
+  };
+  const initialZoomIdx = initialZoomOverrides[id];
 
   return (
     <div className="review-outer" style={{ display: "flex", flexDirection: "column", height: "100dvh", overflow: "hidden" }}>
@@ -170,6 +174,7 @@ export default async function ReviewPage({
           <DocumentPanel
             transcript={detail.transcript}
             scanUrl={scanUrl}
+            initialZoomIdx={initialZoomIdx}
             paragraphs={paragraphs}
             highlights={highlights}
             uncertainSpans={uncertainSpans}
