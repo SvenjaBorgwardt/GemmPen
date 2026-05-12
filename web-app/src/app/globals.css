@@ -1,0 +1,543 @@
+@import "tailwindcss";
+
+:root {
+  --bg-body: #F9F6F1;
+  --bg-card: #FFF9F2;
+  --bg-nav: #F0ECE4;
+  --border-color: #DDD0BE;
+  --radius-card: 8px;
+
+  --text-primary: #2C2216;
+  --text-secondary: #6B5F50;
+  --text-muted: #A09484;
+
+  --btn-primary: #6B5340;
+  --btn-primary-text: #FAF5EE;
+
+  --accent-gold: #B8860B;
+  --score-bar: #C87B1A;
+  --score-bar-bg: #E4DDD2;
+
+  --badge-bg: #EDE0CC;
+  --badge-text: #6B5340;
+
+  --cat-grammar: #B85C3A;
+  --cat-grammar-bg: #FCEEE8;
+  --cat-grammar-border: #D4896E;
+
+  --cat-vocabulary: #B8860B;
+  --cat-vocabulary-bg: #FDF3DC;
+  --cat-vocabulary-border: #D4AD4A;
+
+  --cat-sentence: #7A8B5A;
+  --cat-sentence-bg: #EEF2E6;
+  --cat-sentence-border: #9DAE82;
+
+  --cat-connectives: #7A6B8A;
+  --cat-connectives-bg: #F0ECF4;
+  --cat-connectives-border: #A89AB8;
+
+  --status-reviewed-bg: #DEE8D4;
+  --status-reviewed-text: #4A6B3A;
+  --status-pending-bg: #F5E6C8;
+  --status-pending-text: #8B6914;
+
+  --bar-low: #C4785A;
+  --bar-mid: #C87B1A;
+  --bar-high: #8B9E6B;
+
+  --bg-section-alt: #F3EDE2;
+  --bg-footer: #2C2216;
+  --bg-footer-text: #F0EAE0;
+  --bg-footer-muted: #A09484;
+}
+
+@theme inline {
+  --color-background: var(--bg-body);
+  --color-foreground: var(--text-primary);
+  --font-sans: var(--font-dm-sans);
+  --font-serif: var(--font-cormorant);
+  --font-script: var(--font-caveat);
+}
+
+* { box-sizing: border-box; }
+
+body {
+  background: var(--bg-body);
+  color: var(--text-primary);
+  font-family: var(--font-dm-sans), system-ui, sans-serif;
+  min-height: 100vh;
+}
+
+/* Paper grain texture overlay */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 100;
+  opacity: 0.028;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 256px 256px;
+}
+
+/* Card hover utilities */
+.card-hover {
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(44, 34, 22, 0.10), 0 2px 8px rgba(44, 34, 22, 0.06);
+}
+
+/* Step card clickable hover */
+.step-card-link {
+  cursor: pointer;
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+.step-card-link:hover .card-hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(184, 134, 11, 0.12), 0 2px 8px rgba(44, 34, 22, 0.06);
+  border-color: var(--accent-gold);
+}
+
+/* SVG micro-animations - only on hover */
+
+/* --- Scan beam --- */
+@keyframes scanBeam {
+  0% { transform: translateY(-14px); opacity: 0; }
+  15% { opacity: 1; }
+  85% { opacity: 1; }
+  100% { transform: translateY(36px); opacity: 0; }
+}
+.scan-beam {
+  transform-origin: center;
+  animation: none;
+}
+.step-card-link:hover .scan-beam {
+  animation: scanBeam 2.8s ease-in-out infinite;
+}
+
+/* --- Evaluate: bars calibrate in --- */
+@keyframes barCalibrate {
+  0% { transform: scaleX(0); }
+  50% { transform: scaleX(1.15); }
+  70% { transform: scaleX(0.92); }
+  85% { transform: scaleX(1.04); }
+  100% { transform: scaleX(1); }
+}
+.bar-calibrate {
+  transform-origin: left center;
+}
+.step-card-link:hover .bar-cal-1 { animation: barCalibrate 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards; transform: scaleX(0); }
+.step-card-link:hover .bar-cal-2 { animation: barCalibrate 1.2s cubic-bezier(0.22, 1, 0.36, 1) 0.12s forwards; transform: scaleX(0); }
+.step-card-link:hover .bar-cal-3 { animation: barCalibrate 1.2s cubic-bezier(0.22, 1, 0.36, 1) 0.24s forwards; transform: scaleX(0); }
+.step-card-link:hover .bar-cal-4 { animation: barCalibrate 1.2s cubic-bezier(0.22, 1, 0.36, 1) 0.36s forwards; transform: scaleX(0); }
+
+/* --- Feedback: lines appear, then badge pops --- */
+@keyframes lineReveal {
+  0% { transform: scaleX(0); opacity: 0; }
+  100% { transform: scaleX(1); opacity: 1; }
+}
+@keyframes badgePop {
+  0% { transform: scale(0.6); opacity: 0; }
+  60% { transform: scale(1.1); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+.fb-line {
+  transform-origin: left center;
+}
+.step-card-link:hover .fb-line-1 { animation: lineReveal 0.5s ease-out forwards; transform: scaleX(0); opacity: 0; }
+.step-card-link:hover .fb-line-2 { animation: lineReveal 0.5s ease-out 0.15s forwards; transform: scaleX(0); opacity: 0; }
+.step-card-link:hover .fb-line-3 { animation: lineReveal 0.5s ease-out 0.3s forwards; transform: scaleX(0); opacity: 0; }
+.fb-badge {
+  transform-origin: center center;
+}
+.step-card-link:hover .fb-badge {
+  animation: badgePop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) 0.55s forwards;
+  transform: scale(0.6);
+  opacity: 0;
+}
+
+/* --- Growth: plant grows with category-colored leaves --- */
+
+/* Stem grows upward */
+@keyframes stemGrow {
+  0% { stroke-dashoffset: 48; }
+  100% { stroke-dashoffset: 0; }
+}
+
+/* Leaf unfurls from stem */
+@keyframes leafGrow {
+  0% { transform: scale(0) rotate(-20deg); opacity: 0; }
+  50% { opacity: 0.8; }
+  100% { transform: scale(1) rotate(0deg); opacity: 1; }
+}
+
+/* Tiny bud at the top */
+@keyframes budBloom {
+  0% { transform: scale(0); opacity: 0; }
+  60% { transform: scale(1.15); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* Soil line fades in */
+@keyframes soilAppear {
+  0% { opacity: 0; }
+  100% { opacity: 0.3; }
+}
+
+/* Sprout is visible by default */
+.plant-sprout {
+  transition: opacity 0.3s ease;
+}
+.step-card-link:hover .plant-sprout {
+  opacity: 0;
+}
+
+/* Stem draws on hover */
+.plant-stem {
+  stroke-dasharray: 48;
+  stroke-dashoffset: 48;
+}
+.step-card-link:hover .plant-stem {
+  animation: stemGrow 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.1s forwards;
+}
+
+/* Leaves appear staggered, each from its own branch point */
+.plant-leaf {
+  opacity: 0;
+  transform: scale(0) rotate(-20deg);
+}
+.step-card-link:hover .leaf-1 {
+  transform-origin: 95px 42px;
+  animation: leafGrow 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.4s forwards;
+}
+.step-card-link:hover .leaf-2 {
+  transform-origin: 125px 36px;
+  animation: leafGrow 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.55s forwards;
+}
+.step-card-link:hover .leaf-3 {
+  transform-origin: 95px 28px;
+  animation: leafGrow 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.7s forwards;
+}
+.step-card-link:hover .leaf-4 {
+  transform-origin: 125px 22px;
+  animation: leafGrow 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.85s forwards;
+}
+
+/* Bud at the top appears last */
+.plant-bud {
+  opacity: 0;
+  transform: scale(0);
+  transform-origin: center;
+}
+.step-card-link:hover .plant-bud {
+  animation: budBloom 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 1.05s forwards;
+}
+
+/* --- Mobile: continuous bounce loop (no hover on touch devices) --- */
+
+/* Simple grow/shrink keyframes for clean alternate reversal */
+@keyframes barGrowMobile {
+  0%, 12% { transform: scaleX(0); }
+  88%, 100% { transform: scaleX(1); }
+}
+@keyframes lineRevealMobile {
+  0%, 12% { transform: scaleX(0); opacity: 0; }
+  88%, 100% { transform: scaleX(1); opacity: 1; }
+}
+@keyframes badgePopMobile {
+  0%, 15% { transform: scale(0.6); opacity: 0; }
+  85%, 100% { transform: scale(1); opacity: 1; }
+}
+@keyframes stemGrowMobile {
+  0%, 10% { stroke-dashoffset: 48; }
+  90%, 100% { stroke-dashoffset: 0; }
+}
+@keyframes leafGrowMobile {
+  0%, 10% { transform: scale(0) rotate(-20deg); opacity: 0; }
+  90%, 100% { transform: scale(1) rotate(0deg); opacity: 1; }
+}
+@keyframes budBloomMobile {
+  0%, 15% { transform: scale(0); opacity: 0; }
+  85%, 100% { transform: scale(1); opacity: 1; }
+}
+
+@media (hover: none) {
+  /* Scan beam - continuous */
+  .scan-beam {
+    animation: scanBeam 2.8s ease-in-out infinite;
+  }
+
+  /* Evaluate bars - bounce in/out staggered */
+  .bar-cal-1 { animation: barGrowMobile 2.2s ease-in-out infinite alternate; transform: scaleX(0); }
+  .bar-cal-2 { animation: barGrowMobile 2.2s ease-in-out 0.15s infinite alternate; transform: scaleX(0); }
+  .bar-cal-3 { animation: barGrowMobile 2.2s ease-in-out 0.3s infinite alternate; transform: scaleX(0); }
+  .bar-cal-4 { animation: barGrowMobile 2.2s ease-in-out 0.45s infinite alternate; transform: scaleX(0); }
+
+  /* Feedback lines - bounce in/out staggered */
+  .fb-line-1 { animation: lineRevealMobile 2s ease-in-out infinite alternate; transform: scaleX(0); opacity: 0; }
+  .fb-line-2 { animation: lineRevealMobile 2s ease-in-out 0.18s infinite alternate; transform: scaleX(0); opacity: 0; }
+  .fb-line-3 { animation: lineRevealMobile 2s ease-in-out 0.36s infinite alternate; transform: scaleX(0); opacity: 0; }
+  .fb-badge { animation: badgePopMobile 2s ease-in-out 0.6s infinite alternate; transform: scale(0.6); opacity: 0; }
+
+  /* Plant - grows and shrinks organically */
+  .plant-sprout { opacity: 0; }
+  .plant-stem {
+    animation: stemGrowMobile 3.5s ease-in-out infinite alternate;
+  }
+  .plant-leaf.leaf-1 {
+    animation: leafGrowMobile 3s ease-in-out 0.5s infinite alternate;
+    transform-origin: 95px 42px;
+  }
+  .plant-leaf.leaf-2 {
+    animation: leafGrowMobile 3s ease-in-out 0.7s infinite alternate;
+    transform-origin: 125px 36px;
+  }
+  .plant-leaf.leaf-3 {
+    animation: leafGrowMobile 3s ease-in-out 0.9s infinite alternate;
+    transform-origin: 95px 28px;
+  }
+  .plant-leaf.leaf-4 {
+    animation: leafGrowMobile 3s ease-in-out 1.1s infinite alternate;
+    transform-origin: 125px 22px;
+  }
+  .plant-bud {
+    animation: budBloomMobile 3s ease-in-out 1.4s infinite alternate;
+    transform-origin: center;
+  }
+}
+
+/* ================================================================== */
+/*  Training page - How it works step cards                           */
+/* ================================================================== */
+
+.training-step-card {
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.training-step:hover .training-step-card {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(184, 134, 11, 0.12), 0 2px 8px rgba(44, 34, 22, 0.06);
+  border-color: var(--accent-gold);
+}
+
+/* --- Step 1: Review - default: fully visible, hover: replay --- */
+
+.review-strike {
+  transform-origin: left center;
+}
+.review-correction {
+  transform-origin: left center;
+}
+.review-sparkle {
+  transform-origin: center;
+}
+
+.training-step:hover .review-strike {
+  animation: replayLine 0.9s ease-out forwards;
+}
+.training-step:hover .review-correction {
+  animation: replayLine 0.9s ease-out 0.15s forwards;
+}
+.training-step:hover .review-pen {
+  animation: penSlide 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+.training-step:hover .review-sparkle {
+  animation: replayPop 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.3s forwards;
+}
+
+@keyframes replayLine {
+  0% { transform: scaleX(1); opacity: 1; }
+  25% { transform: scaleX(0); opacity: 0; }
+  100% { transform: scaleX(1); opacity: 1; }
+}
+
+@keyframes penSlide {
+  0% { transform: translate(0, 0); }
+  30% { transform: translate(-4px, -2px); }
+  60% { transform: translate(-2px, 4px); }
+  100% { transform: translate(0, 0); }
+}
+
+@keyframes replayPop {
+  0% { transform: scale(1); opacity: 1; }
+  20% { transform: scale(0); opacity: 0; }
+  60% { transform: scale(1.15); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* --- Step 2: Corrections - default: fully visible, hover: replay --- */
+
+.corr-pair {
+  transform-origin: center;
+}
+.corr-progress {
+  transform-origin: left center;
+}
+
+.training-step:hover .corr-pair-1 {
+  animation: replaySlideIn 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+.training-step:hover .corr-pair-2 {
+  animation: replaySlideIn 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.1s forwards;
+}
+.training-step:hover .corr-pair-3 {
+  animation: replaySlideIn 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards;
+}
+.training-step:hover .corr-progress {
+  animation: replayBar 1.4s cubic-bezier(0.22, 1, 0.36, 1) 0.35s forwards;
+}
+
+@keyframes replaySlideIn {
+  0% { opacity: 1; transform: translateY(0); }
+  25% { opacity: 0; transform: translateY(6px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes replayBar {
+  0% { transform: scaleX(1); }
+  20% { transform: scaleX(0); }
+  55% { transform: scaleX(1.1); }
+  70% { transform: scaleX(0.94); }
+  85% { transform: scaleX(1.03); }
+  100% { transform: scaleX(1); }
+}
+
+/* --- Step 3: Adapt - default: fully visible, hover: replay --- */
+
+.adapt-ring {
+  transform-origin: center;
+  opacity: 0.08;
+}
+.adapt-dot {
+  transform-origin: center;
+  opacity: 0.3;
+}
+
+.training-step:hover .adapt-btn {
+  animation: buttonPress 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.training-step:hover .adapt-ring-1 {
+  animation: replayRipple 1s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards;
+}
+.training-step:hover .adapt-ring-2 {
+  animation: replayRipple 1s cubic-bezier(0.16, 1, 0.3, 1) 0.4s forwards;
+}
+.training-step:hover .adapt-ring-3 {
+  animation: replayRipple 1s cubic-bezier(0.16, 1, 0.3, 1) 0.6s forwards;
+}
+
+.training-step:hover .adapt-dot-1 {
+  animation: replayDot 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.6s forwards;
+}
+.training-step:hover .adapt-dot-2 {
+  animation: replayDot 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.75s forwards;
+}
+.training-step:hover .adapt-dot-3 {
+  animation: replayDot 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.9s forwards;
+}
+.training-step:hover .adapt-dot-4 {
+  animation: replayDot 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 1.05s forwards;
+}
+
+@keyframes buttonPress {
+  0% { transform: scale(1); }
+  15% { transform: scale(0.88); }
+  40% { transform: scale(1.08); }
+  60% { transform: scale(0.97); }
+  100% { transform: scale(1); }
+}
+
+@keyframes replayRipple {
+  0% { opacity: 0.08; transform: scale(1); }
+  20% { opacity: 0; transform: scale(0.5); }
+  50% { opacity: 0.4; transform: scale(0.8); }
+  100% { opacity: 0.08; transform: scale(1); }
+}
+
+@keyframes replayDot {
+  0% { opacity: 0.3; transform: scale(1); }
+  20% { opacity: 0; transform: scale(0); }
+  60% { opacity: 0.5; transform: scale(1.3); }
+  100% { opacity: 0.3; transform: scale(1); }
+}
+
+/* CTA hover */
+.cta-btn {
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+              background 0.3s ease;
+}
+.cta-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(107, 83, 64, 0.25);
+}
+.cta-btn:active {
+  transform: translateY(0);
+}
+
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-thumb { background: #D6CFC4; border-radius: 3px; }
+
+@media (hover: none) {
+  ::-webkit-scrollbar { display: none; }
+  body { -webkit-overflow-scrolling: touch; }
+}
+
+input[type="range"] {
+  appearance: none;
+  -webkit-appearance: none;
+  background: transparent;
+  cursor: pointer;
+}
+input[type="range"]::-webkit-slider-runnable-track {
+  height: 6px;
+  background: var(--score-bar-bg);
+  border-radius: 3px;
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--score-bar);
+  border: 2px solid #fff;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+  margin-top: -8px;
+}
+input[type="range"]::-moz-range-track {
+  height: 6px;
+  background: var(--score-bar-bg);
+  border-radius: 3px;
+}
+input[type="range"]::-moz-range-thumb {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--score-bar);
+  border: 2px solid #fff;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+}
+
+@media (max-width: 768px) {
+  .review-outer { height: auto !important; overflow: visible !important; }
+  .review-split { flex-direction: column !important; height: auto !important; overflow: visible !important; }
+  .review-split > * { width: 100% !important; border-right: none !important; max-height: 50vh; overflow-y: auto; }
+  .review-header { flex-direction: column !important; align-items: flex-start !important; gap: 0.75rem !important; }
+  .review-header-actions { width: 100% !important; justify-content: flex-start !important; flex-wrap: wrap !important; }
+}
+
+@media print {
+  .no-print { display: none !important; }
+  body { background: #fff !important; }
+  .pdf-page { box-shadow: none !important; page-break-after: always; }
+  .page-break-hint { display: none !important; }
+}

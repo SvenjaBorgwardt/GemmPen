@@ -1,0 +1,77 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+.claude/
+
+# Secrets
+.env
+.env.*
+*.token
+hf_token*
+kaggle.json
+
+# Python
+__pycache__/
+*.py[cod]
+*.so
+venv/
+.venv/
+
+# Schueler-Daten (Datenschutz)
+Exam4/
+*_originals.pdf
+iaf31_*.pdf
+iaf32_*.pdf
+
+# Local-only project files
+_archive/
+archive/
+data/
+demo_data/
+eval/
+notebooks/
+video/
+wireframes/
+*.ipynb
+*.docx
+Jordan*
+GemmPen_Jury_Review*
+logo_neu.svg
+ANLEITUNG_OCR_TEST.md
+ARCHITECTURE.md
+DPO_PIPELINE_SPEC.md
+JURY_FIX_PLAN.md
+MOBILE_RESPONSIVE_PROMPT.md
+REVIEW_REDESIGN.md
+TECHNICAL_WRITEUP.md
+VIDEO_SCRIPT*.md
+VIDEO_BRIEFING.md
+design_vergleich.html
+kaggle-thumbnail.html
+inference_test_notebook.py
+test_schueler_synthetic.md
+web-app/AGENTS.md
+web-app/CLAUDE.md
+web-app/README.md
+web-app/TRAINING_PAGE_HANDOFF.md
+
+# Node
+node_modules/
+
+# Logs
+*.log
+logs/
+
+# Temp
+tmp/
+temp/
+*.tmp
+
+# Build
+*.tsbuildinfo
