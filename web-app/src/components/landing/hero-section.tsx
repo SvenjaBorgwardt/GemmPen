@@ -4,13 +4,13 @@ export function HeroSection() {
   return (
     <>
       <h1
+        className="mb-4 md:mb-7"
         style={{
           fontFamily: "var(--font-cormorant), Georgia, serif",
           fontSize: "clamp(2.5rem, 5.5vw, 3.75rem)",
           fontWeight: 500,
           color: "var(--text-primary)",
           lineHeight: 1.1,
-          marginBottom: "1.75rem",
           letterSpacing: "-0.8px",
           maxWidth: "720px",
         }}
@@ -31,12 +31,12 @@ export function HeroSection() {
         own mistakes. And it adapts to your voice over time.
       </p>
       <p
+        className="mb-5 md:mb-10"
         style={{
           fontSize: "0.9375rem",
           color: "var(--text-muted)",
           lineHeight: 1.6,
           maxWidth: "620px",
-          marginBottom: "2.5rem",
         }}
       >
         No internet. No cloud. No student data leaves the classroom.

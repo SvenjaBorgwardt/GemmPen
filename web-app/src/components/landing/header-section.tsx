@@ -1,10 +1,9 @@
 export function HeaderSection() {
   return (
     <header
-      className="flex flex-col sm:flex-row items-center justify-between w-full gap-3"
+      className="flex flex-col sm:flex-row items-center justify-between w-full gap-3 mb-6 md:mb-14"
       style={{
         maxWidth: "1100px",
-        marginBottom: "3.5rem",
       }}
     >
       <span

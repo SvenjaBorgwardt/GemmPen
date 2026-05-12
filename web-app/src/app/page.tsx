@@ -25,10 +25,9 @@ export default function LandingPage() {
       {/* Hero */}
       <main className="flex flex-col items-center w-full">
         <section
-          className="flex flex-col items-center text-center"
+          className="flex flex-col items-center text-center pt-6 md:pt-14 pb-4 md:pb-8 px-6"
           style={{
             maxWidth: "880px",
-            padding: "3.5rem 1.5rem 2rem",
             margin: "0 auto",
           }}
         >
@@ -45,10 +44,10 @@ export default function LandingPage() {
 
         {/* Steps - full-width warm band */}
         <section
+          className="py-8 md:py-18 px-6"
           style={{
             width: "100%",
             background: "var(--bg-section-alt)",
-            padding: "4.5rem 1.5rem",
             marginTop: "0",
           }}
         >
@@ -79,8 +78,8 @@ export default function LandingPage() {
 
         {/* Pull quote */}
         <section
-          className="flex flex-col items-center text-center"
-          style={{ maxWidth: "640px", padding: "4rem 1.5rem 3.5rem", margin: "0 auto" }}
+          className="flex flex-col items-center text-center py-8 md:py-16 px-6"
+          style={{ maxWidth: "640px", margin: "0 auto" }}
         >
           <ScrollReveal>
             <p
@@ -102,8 +101,8 @@ export default function LandingPage() {
 
         {/* Before / After */}
         <section
-          className="flex flex-col items-center"
-          style={{ maxWidth: "880px", padding: "0 1.5rem 4rem", margin: "0 auto", width: "100%" }}
+          className="flex flex-col items-center pb-8 md:pb-16 px-6"
+          style={{ maxWidth: "880px", margin: "0 auto", width: "100%" }}
         >
           <ScrollReveal>
             <BeforeAfterSection />
