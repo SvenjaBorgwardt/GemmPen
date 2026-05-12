@@ -31,7 +31,7 @@ export function ScrollReveal({
           observer.unobserve(el);
         }
       },
-      { threshold: 0.08, rootMargin: "0px 0px -32px 0px" },
+      { threshold: 0.01, rootMargin: "0px 0px 80px 0px" },
     );
 
     observer.observe(el);
@@ -44,7 +44,7 @@ export function ScrollReveal({
       className={className}
       style={{
         opacity: 0,
-        transform: "translateY(28px)",
+        transform: "translateY(16px)",
         transition: [
           `opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1) ${delay}s`,
           `transform 0.8s cubic-bezier(0.16, 1, 0.3, 1) ${delay}s`,
