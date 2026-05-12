@@ -8,6 +8,7 @@ import {
   FooterSection,
 } from "@/components/landing";
 import { ScrollReveal } from "@/components/landing/scroll-reveal";
+import { TechnicalDetails } from "@/components/technical-details";
 
 export default function LandingPage() {
   return (
@@ -106,6 +107,16 @@ export default function LandingPage() {
         >
           <ScrollReveal>
             <BeforeAfterSection />
+          </ScrollReveal>
+        </section>
+
+        {/* Under the hood - collapsible technical details */}
+        <section
+          className="flex flex-col items-center pb-8 md:pb-16 px-6"
+          style={{ maxWidth: "880px", margin: "0 auto", width: "100%" }}
+        >
+          <ScrollReveal>
+            <TechnicalDetails />
           </ScrollReveal>
         </section>
 

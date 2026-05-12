@@ -4,6 +4,7 @@ import { getDetailStudent } from "@/lib/mock-data";
 import { getHighlights, getUncertainSpans } from "@/lib/student-annotations";
 import { ReviewPanel } from "./review-panel";
 import { DocumentPanel } from "./document-panel";
+import { ReviewMobileLayout } from "./review-mobile-layout";
 
 const reviewOrder = ["alex-m", "jordan-k", "casey-r"];
 
@@ -38,8 +39,51 @@ export default async function ReviewPage({
   };
   const initialZoomIdx = initialZoomOverrides[id];
 
+  const documentPanelEl = (
+    <DocumentPanel
+      transcript={detail.transcript}
+      scanUrl={scanUrl}
+      initialZoomIdx={initialZoomIdx}
+      paragraphs={paragraphs}
+      highlights={highlights}
+      uncertainSpans={uncertainSpans}
+    />
+  );
+
+  const reviewPanelEl = (
+    <ReviewPanel
+      studentSlug={id}
+      studentName={detail.name}
+      feedbackItems={detail.feedbackItems}
+    />
+  );
+
   return (
     <div className="review-outer" style={{ display: "flex", flexDirection: "column", height: "100dvh", overflow: "hidden" }}>
+      {/* Mobile-responsive header styles */}
+      <style>{`
+        @media (max-width: 767px) {
+          .review-header {
+            flex-direction: column !important;
+            align-items: flex-start !important;
+            gap: 0.5rem;
+            padding: 0.75rem 0.75rem !important;
+          }
+          .review-header-actions {
+            width: 100%;
+            justify-content: space-between;
+          }
+          .review-header-actions .review-header-separator,
+          .review-header-actions .review-header-count {
+            display: none;
+          }
+          .review-header-actions .review-nav-btn {
+            padding: 0.5rem 0.75rem !important;
+            font-size: 0.75rem !important;
+          }
+        }
+      `}</style>
+
       <div style={{ flexShrink: 0 }}>
         <Nav active="review" />
       </div>
@@ -90,14 +134,14 @@ export default async function ReviewPage({
             <span style={{ fontSize: "0.625rem" }}>&larr;</span>
             Class
           </a>
-          <span style={{ fontSize: "0.75rem", color: "var(--border-color)" }}>|</span>
-          <span style={{ fontSize: "0.75rem", color: "var(--text-muted)" }}>
+          <span className="review-header-separator" style={{ fontSize: "0.75rem", color: "var(--border-color)" }}>|</span>
+          <span className="review-header-count" style={{ fontSize: "0.75rem", color: "var(--text-muted)" }}>
             Student {studentNum} of 21
           </span>
           {prevSlug ? (
             <a
               href={`/app/review/${prevSlug}`}
-              className="inline-block"
+              className="inline-block review-nav-btn"
               style={{
                 fontSize: "0.8125rem",
                 fontWeight: 500,
@@ -116,6 +160,7 @@ export default async function ReviewPage({
             </a>
           ) : (
             <span
+              className="review-nav-btn"
               style={{
                 fontSize: "0.8125rem",
                 fontWeight: 500,
@@ -134,6 +179,7 @@ export default async function ReviewPage({
           )}
           <a
             href={nextHref}
+            className="review-nav-btn"
             style={{
               fontSize: "0.8125rem",
               fontWeight: 500,
@@ -153,40 +199,10 @@ export default async function ReviewPage({
         </div>
       </div>
 
-      <div
-        className="review-split"
-        style={{
-          display: "flex",
-          flex: 1,
-          minHeight: 0,
-          overflow: "hidden",
-          alignItems: "stretch",
-        }}
-      >
-        <div
-          style={{
-            width: "45%",
-            flexShrink: 0,
-            borderRight: "0.5px solid var(--border-color)",
-            overflow: "hidden",
-          }}
-        >
-          <DocumentPanel
-            transcript={detail.transcript}
-            scanUrl={scanUrl}
-            initialZoomIdx={initialZoomIdx}
-            paragraphs={paragraphs}
-            highlights={highlights}
-            uncertainSpans={uncertainSpans}
-          />
-        </div>
-
-        <ReviewPanel
-          studentSlug={id}
-          studentName={detail.name}
-          feedbackItems={detail.feedbackItems}
-        />
-      </div>
+      <ReviewMobileLayout
+        documentPanel={documentPanelEl}
+        reviewPanel={reviewPanelEl}
+      />
     </div>
   );
 }

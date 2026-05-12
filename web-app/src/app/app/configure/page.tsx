@@ -246,16 +246,14 @@ export default function ConfigurePage() {
 
   const toggleSub = (rowId: string, label: string) =>
     setCategories((rows) =>
-      rows.map((r) =>
-        r.id === rowId && r.subToggles
-          ? {
-              ...r,
-              subToggles: r.subToggles.map((s) =>
-                s.label === label ? { ...s, on: !s.on } : s,
-              ),
-            }
-          : r,
-      ),
+      rows.map((r) => {
+        if (r.id !== rowId || !r.subToggles) return r;
+        const updatedSubs = r.subToggles.map((s) =>
+          s.label === label ? { ...s, on: !s.on } : s,
+        );
+        const allSubsOff = updatedSubs.every((s) => !s.on);
+        return { ...r, on: allSubsOff ? false : r.on, subToggles: updatedSubs };
+      }),
     );
 
   return (
@@ -266,11 +264,11 @@ export default function ConfigurePage() {
         style={{
           maxWidth: "880px",
           margin: "0 auto",
-          paddingBottom: "4rem",
+          paddingBottom: processing ? "0.5rem" : "4rem",
         }}
       >
         {processing ? (
-          <ProcessingView />
+          <ProcessingView disabledCategories={categories.filter((c) => !c.on).map((c) => c.name)} />
         ) : (
           <>
             <Link
@@ -456,15 +454,16 @@ export default function ConfigurePage() {
                     padding: "1rem",
                     borderRadius: "var(--radius-card)",
                     border: selectedGrading === g.id
-                      ? "1.5px solid var(--accent-warm)"
+                      ? "0.5px solid var(--accent-gold)"
                       : "0.5px solid var(--border-color)",
-                    background: selectedGrading === g.id
-                      ? "var(--bg-warm-highlight, #FDF6EC)"
-                      : "var(--bg-card)",
+                    boxShadow: selectedGrading === g.id
+                      ? "0 0 0 1.5px var(--accent-gold)"
+                      : "none",
+                    background: "var(--bg-card)",
                     cursor: "pointer",
                     textAlign: "left",
                     fontFamily: "inherit",
-                    transition: "border-color 0.15s, background 0.15s",
+                    transition: "border-color 0.15s, box-shadow 0.15s",
                   }}
                 >
                   <div
@@ -473,7 +472,7 @@ export default function ConfigurePage() {
                       fontWeight: 700,
                       letterSpacing: "1px",
                       color: selectedGrading === g.id
-                        ? "var(--accent-warm)"
+                        ? "var(--accent-gold)"
                         : "var(--text-muted)",
                       marginBottom: "0.375rem",
                     }}
@@ -505,7 +504,7 @@ export default function ConfigurePage() {
                       fontSize: "0.75rem",
                       fontWeight: 600,
                       color: selectedGrading === g.id
-                        ? "var(--accent-warm)"
+                        ? "var(--accent-gold)"
                         : "var(--text-secondary)",
                     }}
                   >
