@@ -55,10 +55,12 @@ export default function UploadPage() {
   return (
     <>
       <style>{`
-        @keyframes nudgeUp {
-          0%, 100% { transform: translateY(0); }
-          40% { transform: translateY(-6px); }
-          60% { transform: translateY(-3px); }
+        @media (hover: hover) {
+          @keyframes nudgeUp {
+            0%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-6px); }
+            60% { transform: translateY(-3px); }
+          }
         }
         @keyframes fadeInHint {
           from { opacity: 0; transform: translateY(4px); }

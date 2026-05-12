@@ -83,7 +83,7 @@ export default async function FeedbackPage({
               background: "#FEFCF8",
               border: "1px solid #E8E0D4",
               borderRadius: "6px",
-              padding: "1rem 1rem",
+              padding: "clamp(1rem, 3vw, 1.375rem) clamp(1rem, 3vw, 1.625rem)",
               marginBottom: "1.5rem",
               fontFamily: "var(--font-caveat), cursive",
               fontSize: "clamp(0.9375rem, 3.5vw, 1.1875rem)",
