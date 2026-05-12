@@ -18,22 +18,22 @@ export interface GradeResult {
 // --- NRW 15-point scale (German Abitur / Berufskolleg) ---
 
 const NRW_THRESHOLDS: Array<{ min: number; points: number; band: string }> = [
-  { min: 95, points: 15, band: "sehr gut +" },
-  { min: 90, points: 14, band: "sehr gut" },
-  { min: 85, points: 13, band: "sehr gut -" },
-  { min: 80, points: 12, band: "gut +" },
-  { min: 75, points: 11, band: "gut" },
-  { min: 70, points: 10, band: "gut -" },
-  { min: 65, points: 9, band: "befriedigend +" },
-  { min: 60, points: 8, band: "befriedigend" },
-  { min: 55, points: 7, band: "befriedigend -" },
-  { min: 50, points: 6, band: "ausreichend +" },
-  { min: 45, points: 5, band: "ausreichend" },
-  { min: 40, points: 4, band: "ausreichend -" },
-  { min: 33, points: 3, band: "mangelhaft +" },
-  { min: 27, points: 2, band: "mangelhaft" },
-  { min: 20, points: 1, band: "mangelhaft -" },
-  { min: 0, points: 0, band: "ungenuegend" },
+  { min: 95, points: 15, band: "excellent +" },
+  { min: 90, points: 14, band: "excellent" },
+  { min: 85, points: 13, band: "excellent -" },
+  { min: 80, points: 12, band: "good +" },
+  { min: 75, points: 11, band: "good" },
+  { min: 70, points: 10, band: "good -" },
+  { min: 65, points: 9, band: "satisfactory +" },
+  { min: 60, points: 8, band: "satisfactory" },
+  { min: 55, points: 7, band: "satisfactory -" },
+  { min: 50, points: 6, band: "adequate +" },
+  { min: 45, points: 5, band: "adequate" },
+  { min: 40, points: 4, band: "adequate -" },
+  { min: 33, points: 3, band: "insufficient +" },
+  { min: 27, points: 2, band: "insufficient" },
+  { min: 20, points: 1, band: "insufficient -" },
+  { min: 0, points: 0, band: "very poor" },
 ];
 
 function toNRW(pct: number): GradeResult {

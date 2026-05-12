@@ -88,8 +88,7 @@ export function TechnicalDetails() {
             lineHeight: 1.5,
           }}
         >
-          Local Gemma 4 E4B inference, DPO preference learning, LoRA adapter
-          stacking, JSONL export
+          One model does it all: Gemma 4 reads handwriting, scores against your rubric, writes feedback, and learns your voice.
         </p>
       )}
 
@@ -110,11 +109,15 @@ export function TechnicalDetails() {
                 marginBottom: "1.25rem",
               }}
             >
-              All of GemmPen&apos;s core work (reading handwriting, scoring,
-              generating feedback) runs locally on the teacher&apos;s device.
-              The adaptation step is the only part that connects to an external
-              server, and it only sends your corrections, never student data.
+              Everything runs on a single device. No internet, no cloud,
+              no data leaving the classroom. GemmPen is built on Gemma 4
+              E4B, a multimodal open-weights model by Google DeepMind
+              that understands both images and text. One model handles
+              the entire journey: from reading a student&apos;s handwriting
+              to generating exercises tailored to their mistakes.
             </p>
+
+            <StepHeading num="01" title="Reading handwriting" />
             <p
               style={{
                 fontSize: "0.8125rem",
@@ -124,15 +127,14 @@ export function TechnicalDetails() {
                 marginBottom: "1.25rem",
               }}
             >
-              The personalization step uses DPO (Direct Preference Optimization
-              - a method that learns from the contrast between what you
-              rejected and what you preferred) rather than retraining from
-              scratch. This is significantly more data-efficient: 30 correction
-              pairs are enough to noticeably shift the model&apos;s voice. Each
-              correction is stored as a preference pair in the browser and
-              exported as JSONL (one JSON object per line) in the Gemma
-              conversation format.
+              Gemma 4 reads handwritten exams directly from a photo or
+              scan - no separate recognition step, no external service.
+              It handles crossed-out words, corrections, and messy
+              handwriting. Teachers can review and correct the transcript
+              before moving on.
             </p>
+
+            <StepHeading num="02" title="Scoring against your rubric" />
             <p
               style={{
                 fontSize: "0.8125rem",
@@ -142,13 +144,84 @@ export function TechnicalDetails() {
                 marginBottom: "1.25rem",
               }}
             >
-              Adaptation runs on a free Kaggle T4 GPU in about 30 minutes. The
-              existing base adapter is merged first, then a fresh LoRA adapter (a
-              lightweight add-on under 50 MB that adjusts style without changing
-              core abilities) is created on top using DPO. This stacking approach
-              means the model keeps its structured exam feedback ability but shifts
-              toward the teacher&apos;s preferred style. The correction data is
-              deleted from the server after the run completes.
+              The model was fine-tuned on real student exams to do three
+              things: find errors and map them to rubric categories, check
+              argument structure, and explain every score with direct quotes
+              from the student&apos;s text. The rubric itself is passed as a
+              configuration, not baked into the model, so any teacher can
+              bring their own grading criteria.
+            </p>
+
+            <StepHeading num="03" title="Writing feedback that teaches" />
+            <p
+              style={{
+                fontSize: "0.8125rem",
+                color: "var(--text-secondary)",
+                lineHeight: 1.9,
+                margin: 0,
+                marginBottom: "1.25rem",
+              }}
+            >
+              Every piece of feedback is written at a level the student can
+              actually understand (B1-B2 English). It points to specific
+              sentences in their essay, explains the pattern behind the
+              error, and nudges them toward the answer without giving it
+              away. The goal is always the same: help students recognize
+              their own mistakes and build confidence doing it.
+            </p>
+
+            <StepHeading num="04" title="Personalized exercises" />
+            <p
+              style={{
+                fontSize: "0.8125rem",
+                color: "var(--text-secondary)",
+                lineHeight: 1.9,
+                margin: 0,
+                marginBottom: "1.25rem",
+              }}
+            >
+              Based on each student&apos;s individual errors, GemmPen
+              generates targeted practice exercises. Students can submit
+              answers as many times as they want and get immediate hints
+              if something is not quite right yet.
+            </p>
+
+            <StepHeading num="05" title="Learning your voice (optional)" />
+            <p
+              style={{
+                fontSize: "0.8125rem",
+                color: "var(--text-secondary)",
+                lineHeight: 1.9,
+                margin: 0,
+                marginBottom: "1.25rem",
+              }}
+            >
+              This part is entirely optional. If you edit a few feedback
+              drafts, GemmPen saves each correction as a before-and-after
+              pair. After about 30 edits, you can export them and train a
+              personal LoRA adapter (a small add-on under 50 MB) on a free
+              Kaggle GPU in about 30 minutes. From that point on, feedback
+              sounds more like you. Only the corrections are uploaded for
+              training, never student essays, names, or scores.
+            </p>
+
+            <StepHeading num="06" title="Built to be reproduced" />
+            <p
+              style={{
+                fontSize: "0.8125rem",
+                color: "var(--text-secondary)",
+                lineHeight: 1.9,
+                margin: 0,
+                marginBottom: "1.25rem",
+              }}
+            >
+              Fine-tuned on real student exams using LoRA and Unsloth on a
+              free Kaggle T4 GPU. The fine-tuned model produces significantly
+              more specific feedback than the base model, citing concrete
+              passages and adapting its tone to each student&apos;s level.
+              All weights are open, the full training notebook is public, and
+              the entire pipeline can be reproduced on any device that runs
+              Gemma 4.
             </p>
 
             {/* Links */}
@@ -189,6 +262,39 @@ export function TechnicalDetails() {
           </div>
         </div>
       )}
+    </div>
+  );
+}
+
+function StepHeading({ num, title }: { num: string; title: string }) {
+  return (
+    <div
+      className="flex items-baseline"
+      style={{ gap: "0.375rem", marginBottom: "0.375rem" }}
+    >
+      <span
+        style={{
+          fontSize: "0.625rem",
+          fontWeight: 700,
+          color: "var(--accent-gold)",
+          letterSpacing: "1px",
+          background: "#FDF3DC",
+          padding: "0.125rem 0.4rem",
+          borderRadius: "4px",
+        }}
+      >
+        {num}
+      </span>
+      <span
+        style={{
+          fontFamily: "var(--font-cormorant), Georgia, serif",
+          fontSize: "1rem",
+          fontWeight: 600,
+          color: "var(--text-primary)",
+        }}
+      >
+        {title}
+      </span>
     </div>
   );
 }
