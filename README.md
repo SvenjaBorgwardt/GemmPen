@@ -13,11 +13,13 @@ Submission for the [Gemma 4 Good Hackathon](https://www.kaggle.com/competitions/
 
 ## The Problem
 
-Research consistently shows that detailed, individual feedback is one of the most powerful drivers of student learning. Yet in practice, it rarely happens. A teacher grading a stack of handwritten exams faces a hard tradeoff: spend hours writing personal comments for each student, or move on to the next lesson. Most choose the latter - not because they do not care, but because there is no time.
+I am a teacher at a vocational school in Cologne, Germany. Every exam cycle, I grade over 240 handwritten English exams. For each one, I want to write individual feedback that cites specific passages, explains why a student lost points, and gives them exercises to improve. In practice, I never have time for that. Most students get a grade and nothing else.
 
-The result: students receive a grade but never understand what exactly they did well, where they went wrong, or how to improve. Personalized exercises based on each student's specific mistakes have been virtually impossible to create at scale.
+GemmPen is trained on real exam data from my classroom. I transcribed and graded 38 handwritten exams from two of my classes during the four-week hackathon window - that is the maximum I could include under Germany's strict data protection rules (GDPR), since every student's parents had to give written consent. But 38 exams do not mean 38 training examples. GemmPen's micro-task architecture breaks each exam into multiple independent scoring, analysis, and feedback tasks - producing 941 training pairs from those 38 source texts. No synthetic data was used. Every training pair comes from a real student's writing and a real teacher's grade.
 
-GemmPen changes this. It gives every student feedback that cites their own writing, explains each score transparently, and generates exercises targeting their individual weaknesses - all running on a single device, in any classroom in the world.
+In a normal school year, I grade over 240 exams per cycle across multiple classes. The pipeline is designed to scale: each new exam batch generates roughly 25 training pairs per student, and the teacher correction loop (DPO) continuously improves the model. The 38 exams in this submission are a starting point, not a ceiling.
+
+This is not a research demo. It is a tool I built because I need it.
 
 ---
 
@@ -140,7 +142,7 @@ Data balancing was applied to KT2 after the first training run revealed hallucin
 
 ## Evaluation
 
-A side-by-side comparison of base Gemma 4 vs. fine-tuned GemmPen on the same student texts (KT3 grammar feedback):
+A side-by-side comparison of base Gemma 4 vs. fine-tuned GemmPen, evaluated on all 38 real student texts from the same exam period (KT3 grammar feedback):
 
 | Metric | Base Gemma 4 | Fine-tuned GemmPen |
 |--------|-------------|-------------------|
@@ -240,6 +242,6 @@ Landing  ->  Upload  ->  Configure  ->  Start AI Evaluation
 
 ---
 
-Built by [Svenja Borgwardt](https://github.com/SvenjaBorgwardt) - teacher, developer, and the person who grades these exams.
+Built by [Svenja Borgwardt](https://github.com/SvenjaBorgwardt) - English teacher at a vocational school in Cologne, Germany, and the person who grades these exams.
 
 Powered by [Gemma 4](https://ai.google.dev/gemma) from Google DeepMind.
