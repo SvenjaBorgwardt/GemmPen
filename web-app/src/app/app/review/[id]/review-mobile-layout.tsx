@@ -55,25 +55,31 @@ export function ReviewMobileLayout({
             flex-shrink: 0;
             border-bottom: 0.5px solid var(--border-color);
             background: var(--bg-card);
+            position: sticky;
+            top: 0;
+            z-index: 10;
           }
 
           .review-tab-bar button {
             flex: 1;
-            padding: 0.75rem 0;
-            font-family: var(--font-cormorant), Georgia, serif;
-            font-size: 0.9375rem;
-            font-weight: 500;
+            padding: 0.625rem 0;
+            font-family: var(--font-dm-sans), system-ui, sans-serif;
+            font-size: 0.8125rem;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+            text-transform: uppercase;
             background: none;
             border: none;
-            border-bottom: 2px solid transparent;
+            border-bottom: 2.5px solid transparent;
             color: var(--text-muted);
             cursor: pointer;
             transition: color 0.15s, border-color 0.15s;
+            min-height: 44px;
           }
 
           .review-tab-bar button[data-active="true"] {
             color: var(--text-primary);
-            border-bottom-color: var(--accent-gold);
+            border-bottom-color: var(--accent-gold, #B8860B);
           }
 
           .review-split-wrapper {
@@ -86,6 +92,8 @@ export function ReviewMobileLayout({
             flex: 1 1 0;
             border-right: none;
             min-height: 0;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
           }
 
           .review-split-left[data-hidden="true"] {

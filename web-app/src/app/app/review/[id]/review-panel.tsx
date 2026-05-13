@@ -132,6 +132,7 @@ export function ReviewPanel({ studentSlug, studentName, feedbackItems }: ReviewP
 
   return (
     <div
+      className="review-panel-root"
       style={{
         flex: "1 1 0",
         minWidth: 0,
@@ -141,8 +142,28 @@ export function ReviewPanel({ studentSlug, studentName, feedbackItems }: ReviewP
         overflow: "hidden",
       }}
     >
+    <style>{`
+      @media (max-width: 767px) {
+        .review-panel-root .review-panel-scroll {
+          padding: 0.75rem 0.625rem !important;
+          padding-bottom: 0.375rem !important;
+        }
+        .review-panel-root .review-panel-title {
+          font-size: 1.125rem !important;
+        }
+        .review-panel-root .review-panel-footer {
+          padding: 0.5rem 0.625rem !important;
+        }
+        .review-panel-root .review-panel-footer a {
+          width: 100%;
+          justify-content: center;
+          font-size: 0.75rem !important;
+          padding: 0.5rem 1rem !important;
+        }
+      }
+    `}</style>
     <div
-      className="overflow-y-auto"
+      className="review-panel-scroll overflow-y-auto"
       style={{
         flex: "1 1 0",
         minHeight: 0,
@@ -155,6 +176,7 @@ export function ReviewPanel({ studentSlug, studentName, feedbackItems }: ReviewP
         style={{ marginBottom: "1.25rem" }}
       >
         <span
+          className="review-panel-title"
           style={{
             fontFamily: "var(--font-cormorant), Georgia, serif",
             fontSize: "1.375rem",
@@ -282,6 +304,7 @@ export function ReviewPanel({ studentSlug, studentName, feedbackItems }: ReviewP
 
       {/* Floating footer - always visible */}
       <div
+        className="review-panel-footer"
         style={{
           flexShrink: 0,
           padding: "0.75rem 1rem",

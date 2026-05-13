@@ -58,6 +58,7 @@ export function ScoreSummary({ items }: ScoreSummaryProps) {
 
   return (
     <div
+      className="score-summary-root"
       style={{
         background: "var(--bg-card)",
         border: "0.5px solid var(--border-color)",
@@ -66,13 +67,36 @@ export function ScoreSummary({ items }: ScoreSummaryProps) {
         marginBottom: "1rem",
       }}
     >
+      <style>{`
+        @media (max-width: 767px) {
+          .score-summary-root {
+            padding: 0.625rem 0.625rem !important;
+          }
+          .score-summary-root .ss-top-row {
+            flex-direction: row !important;
+            gap: 0.5rem;
+          }
+          .score-summary-root .ss-grade-box {
+            width: 40px !important;
+            height: 40px !important;
+            font-size: 1.125rem !important;
+          }
+          .score-summary-root .ss-chips {
+            gap: 0.375rem !important;
+          }
+          .score-summary-root .ss-chips > div {
+            min-width: 80px !important;
+          }
+        }
+      `}</style>
       {/* Top row: overall grade prominent */}
       <div
-        className="flex items-center justify-between"
+        className="ss-top-row flex items-center justify-between"
         style={{ marginBottom: "0.75rem" }}
       >
         <div className="flex items-center" style={{ gap: "0.75rem" }}>
           <div
+            className="ss-grade-box"
             style={{
               width: "48px",
               height: "48px",
@@ -131,7 +155,7 @@ export function ScoreSummary({ items }: ScoreSummaryProps) {
 
       {/* Breakdown row */}
       <div
-        className="flex"
+        className="ss-chips flex"
         style={{
           gap: "0.5rem",
           flexWrap: "wrap",

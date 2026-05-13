@@ -65,21 +65,39 @@ export default async function ReviewPage({
         @media (max-width: 767px) {
           .review-header {
             flex-direction: column !important;
-            align-items: flex-start !important;
-            gap: 0.5rem;
-            padding: 0.75rem 0.75rem !important;
+            align-items: stretch !important;
+            gap: 0.375rem;
+            padding: 0.625rem 0.75rem !important;
+          }
+          .review-header-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          }
+          .review-header-top h2 {
+            font-size: 1.125rem !important;
+          }
+          .review-header-top p {
+            font-size: 0.6875rem !important;
           }
           .review-header-actions {
             width: 100%;
-            justify-content: space-between;
+            display: flex !important;
+            gap: 0.5rem !important;
           }
           .review-header-actions .review-header-separator,
           .review-header-actions .review-header-count {
             display: none;
           }
+          .review-header-actions .review-back-link {
+            margin-right: auto;
+          }
           .review-header-actions .review-nav-btn {
-            padding: 0.5rem 0.75rem !important;
+            flex: 1;
+            justify-content: center !important;
+            padding: 0.5rem 0.5rem !important;
             font-size: 0.75rem !important;
+            min-height: 40px !important;
           }
         }
       `}</style>
@@ -97,31 +115,49 @@ export default async function ReviewPage({
           borderBottom: "0.5px solid var(--border-color)",
         }}
       >
-        <div>
-          <h2
-            style={{
-              fontFamily: "var(--font-cormorant), Georgia, serif",
-              fontSize: "1.375rem",
-              fontWeight: 500,
-              color: "var(--text-primary)",
-              lineHeight: 1.2,
-            }}
-          >
-            {detail.name}
-          </h2>
-          <p
+        <div className="review-header-top">
+          <div>
+            <h2
+              style={{
+                fontFamily: "var(--font-cormorant), Georgia, serif",
+                fontSize: "1.375rem",
+                fontWeight: 500,
+                color: "var(--text-primary)",
+                lineHeight: 1.2,
+              }}
+            >
+              {detail.name}
+            </h2>
+            <p
+              style={{
+                fontSize: "0.75rem",
+                color: "var(--text-muted)",
+                marginTop: "2px",
+              }}
+            >
+              {detail.taskInfo}
+            </p>
+          </div>
+          <a
+            href="/app/class"
+            className="review-back-link hidden md:inline-flex"
             style={{
               fontSize: "0.75rem",
               color: "var(--text-muted)",
-              marginTop: "2px",
+              textDecoration: "none",
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "4px",
             }}
           >
-            {detail.taskInfo}
-          </p>
+            <span style={{ fontSize: "0.625rem" }}>&larr;</span>
+            Class
+          </a>
         </div>
         <div className="review-header-actions flex items-center" style={{ gap: "0.75rem" }}>
           <a
             href="/app/class"
+            className="review-back-link md:hidden"
             style={{
               fontSize: "0.75rem",
               color: "var(--text-muted)",

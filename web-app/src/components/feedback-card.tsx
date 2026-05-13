@@ -160,6 +160,7 @@ export function FeedbackCard({
 
   return (
     <div
+      className="feedback-card-root"
       style={{
         background: "var(--bg-card)",
         border: "0.5px solid var(--border-color)",
@@ -169,9 +170,37 @@ export function FeedbackCard({
         transition: "opacity 0.2s",
       }}
     >
+    <style>{`
+      @media (max-width: 767px) {
+        .feedback-card-root {
+          padding: 0.75rem 0.625rem !important;
+          margin-bottom: 0.625rem !important;
+        }
+        .feedback-card-root .fc-header {
+          flex-direction: column !important;
+          align-items: flex-start !important;
+          gap: 0.375rem !important;
+        }
+        .feedback-card-root .fc-score-row {
+          width: 100%;
+        }
+        .feedback-card-root .fc-score-row input[type="range"] {
+          flex: 1;
+          min-width: 0;
+          width: 100% !important;
+        }
+        .feedback-card-root .fc-actions {
+          gap: 0.375rem !important;
+        }
+        .feedback-card-root .fc-actions button {
+          font-size: 0.6875rem !important;
+          padding: 0.4375rem 0.625rem !important;
+        }
+      }
+    `}</style>
       {/* Header: label + badge + score slider */}
       <div
-        className="flex flex-wrap items-center justify-between gap-2"
+        className="fc-header flex flex-wrap items-center justify-between gap-2"
         style={{ marginBottom: "0.625rem" }}
       >
         <div className="flex items-center" style={{ gap: "0.5rem" }}>
@@ -199,7 +228,7 @@ export function FeedbackCard({
             </span>
           )}
         </div>
-        <div className="flex items-center" style={{ gap: "0.5rem" }}>
+        <div className="fc-score-row flex items-center" style={{ gap: "0.5rem" }}>
           <input
             type="range"
             min={0}
@@ -378,7 +407,7 @@ export function FeedbackCard({
       )}
 
       {/* Actions */}
-      <div className="flex flex-wrap items-center" style={{ gap: "0.5rem", marginTop: "0.5rem" }}>
+      <div className="fc-actions flex flex-wrap items-center" style={{ gap: "0.5rem", marginTop: "0.5rem" }}>
         {state === "editing" ? (
           <>
             <ActionButton

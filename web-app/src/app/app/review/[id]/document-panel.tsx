@@ -307,6 +307,14 @@ export function DocumentPanel({
   const containerRef = useRef<HTMLDivElement>(null);
   const [scanRatio, setScanRatio] = useState(0.35);
   const isDragging = useRef(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
 
   const onPointerDown = useCallback(
     (e: React.PointerEvent) => {
@@ -345,9 +353,12 @@ export function DocumentPanel({
     [],
   );
 
+  const mobileScanRatio = 0.3;
+
   return (
     <div
       ref={containerRef}
+      className="doc-panel-root"
       style={{
         display: "flex",
         flexDirection: "column",
@@ -355,10 +366,35 @@ export function DocumentPanel({
         overflow: "hidden",
       }}
     >
+      <style>{`
+        @media (max-width: 767px) {
+          .doc-panel-root .doc-scan-area {
+            padding: 0.5rem 0.5rem 0 0.5rem !important;
+          }
+          .doc-panel-root .doc-transcript-area {
+            padding: 0 0.5rem 0.5rem 0.5rem !important;
+          }
+          .doc-panel-root .doc-drag-handle {
+            padding: 0 0.5rem !important;
+          }
+          .doc-panel-root .doc-legend {
+            gap: 0.375rem !important;
+          }
+          .doc-panel-root .doc-legend-item {
+            font-size: 0.5625rem !important;
+          }
+          .doc-panel-root .doc-scan-badge {
+            font-size: 0.5rem !important;
+            padding: 1px 4px !important;
+          }
+        }
+      `}</style>
+
       {/* ---- Scan area ---- */}
       <div
+        className="doc-scan-area"
         style={{
-          flex: `0 0 ${scanRatio * 100}%`,
+          flex: `0 0 ${(isMobile ? mobileScanRatio : scanRatio) * 100}%`,
           position: "relative",
           overflow: "hidden",
           padding: "1rem 1rem 0 1rem",
@@ -371,6 +407,7 @@ export function DocumentPanel({
             <SimulatedScan transcript={transcript} />
           )}
           <span
+            className="doc-scan-badge"
             style={{
               position: "absolute",
               top: "8px",
@@ -393,6 +430,7 @@ export function DocumentPanel({
 
       {/* ---- Drag handle ---- */}
       <div
+        className="doc-drag-handle"
         onPointerDown={onPointerDown}
         onPointerMove={onPointerMove}
         onPointerUp={onPointerUp}
@@ -447,6 +485,7 @@ export function DocumentPanel({
 
       {/* ---- Transcript area ---- */}
       <div
+        className="doc-transcript-area"
         style={{
           flex: 1,
           overflow: "hidden",
@@ -485,7 +524,7 @@ export function DocumentPanel({
 
         {/* Category legend */}
         <div
-          className="flex"
+          className="doc-legend flex"
           style={{
             gap: "0.75rem",
             marginBottom: "0.5rem",
@@ -496,12 +535,12 @@ export function DocumentPanel({
           {[
             { label: "Grammar", color: "var(--cat-grammar)", bg: "var(--cat-grammar-bg)" },
             { label: "Vocabulary", color: "var(--cat-vocabulary)", bg: "var(--cat-vocabulary-bg)" },
-            { label: "Sentence Structure", color: "var(--cat-sentence)", bg: "var(--cat-sentence-bg)" },
+            { label: "Sent. Structure", color: "var(--cat-sentence)", bg: "var(--cat-sentence-bg)" },
             { label: "Connectives", color: "var(--cat-connectives)", bg: "var(--cat-connectives-bg)" },
           ].map((c) => (
             <span
               key={c.label}
-              className="flex items-center"
+              className="doc-legend-item flex items-center"
               style={{ fontSize: "0.625rem", color: c.color, gap: "4px" }}
             >
               <span
@@ -512,6 +551,7 @@ export function DocumentPanel({
                   borderRadius: "2px",
                   background: c.bg,
                   border: `1px solid ${c.color}`,
+                  flexShrink: 0,
                 }}
               />
               {c.label}
@@ -520,6 +560,7 @@ export function DocumentPanel({
         </div>
 
         <p
+          className="doc-hint-text"
           style={{
             fontSize: "0.6875rem",
             color: "var(--text-muted)",
@@ -528,7 +569,9 @@ export function DocumentPanel({
             flexShrink: 0,
           }}
         >
-          Hover over highlighted text to see error details
+          {isMobile
+            ? "Tap highlighted text to see error details"
+            : "Hover over highlighted text to see error details"}
         </p>
 
         {/* Scrollable transcript */}
