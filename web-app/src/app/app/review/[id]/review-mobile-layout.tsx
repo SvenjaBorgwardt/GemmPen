@@ -16,31 +16,29 @@ export function ReviewMobileLayout({
   );
 
   return (
-    <>
+    <div className="review-layout-root">
       <style>{`
-        /* ---- Mobile tab bar: hidden on desktop ---- */
+        /* ---- Desktop: side-by-side, tab bar hidden ---- */
+        .review-layout-root {
+          display: flex;
+          flex: 1 1 0%;
+          min-height: 0;
+          overflow: hidden;
+        }
+
         .review-tab-bar {
           display: none;
         }
 
-        /* ---- Desktop: side-by-side (unchanged) ---- */
-        .review-split-wrapper {
-          display: flex;
-          flex: 1;
-          min-height: 0;
-          overflow: hidden;
-          align-items: stretch;
-        }
-
-        .review-split-left {
+        .review-panel-doc {
           width: 45%;
           flex-shrink: 0;
           border-right: 0.5px solid var(--border-color);
           overflow: hidden;
         }
 
-        .review-split-right {
-          flex: 1 1 0;
+        .review-panel-feed {
+          flex: 1 1 0%;
           min-width: 0;
           min-height: 0;
           display: flex;
@@ -48,16 +46,21 @@ export function ReviewMobileLayout({
           overflow: hidden;
         }
 
-        /* ---- Mobile overrides (< 768px) ---- */
+        /* ---- Mobile: stacked with tab switcher ---- */
         @media (max-width: 767px) {
+          .review-layout-root {
+            display: flex;
+            flex-direction: column;
+            flex: 1 1 0%;
+            min-height: 0;
+            overflow: hidden;
+          }
+
           .review-tab-bar {
             display: flex;
-            flex-shrink: 0;
+            flex: 0 0 auto;
             border-bottom: 0.5px solid var(--border-color);
             background: var(--bg-card);
-            position: sticky;
-            top: 0;
-            z-index: 10;
           }
 
           .review-tab-bar button {
@@ -82,30 +85,28 @@ export function ReviewMobileLayout({
             border-bottom-color: var(--accent-gold, #B8860B);
           }
 
-          .review-split-wrapper {
-            display: flex;
-            flex-direction: column;
+          .review-panel-doc {
+            width: 100%;
+            flex: 1 1 0%;
+            min-height: 0;
+            border-right: none;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
           }
 
-          .review-split-left {
+          .review-panel-doc[data-hidden="true"] {
+            display: none;
+          }
+
+          .review-panel-feed {
             width: 100%;
-            flex: 1 1 0;
-            border-right: none;
+            flex: 1 1 0%;
             min-height: 0;
             overflow-y: auto;
             -webkit-overflow-scrolling: touch;
           }
 
-          .review-split-left[data-hidden="true"] {
-            display: none;
-          }
-
-          .review-split-right {
-            width: 100%;
-            flex: 1 1 0;
-          }
-
-          .review-split-right[data-hidden="true"] {
+          .review-panel-feed[data-hidden="true"] {
             display: none;
           }
         }
@@ -129,21 +130,21 @@ export function ReviewMobileLayout({
         </button>
       </div>
 
-      {/* Panels */}
-      <div className="review-split-wrapper">
-        <div
-          className="review-split-left"
-          data-hidden={activeTab !== "document"}
-        >
-          {documentPanel}
-        </div>
-        <div
-          className="review-split-right"
-          data-hidden={activeTab !== "feedback"}
-        >
-          {reviewPanel}
-        </div>
+      {/* Document panel */}
+      <div
+        className="review-panel-doc"
+        data-hidden={activeTab !== "document"}
+      >
+        {documentPanel}
       </div>
-    </>
+
+      {/* Feedback panel */}
+      <div
+        className="review-panel-feed"
+        data-hidden={activeTab !== "feedback"}
+      >
+        {reviewPanel}
+      </div>
+    </div>
   );
 }

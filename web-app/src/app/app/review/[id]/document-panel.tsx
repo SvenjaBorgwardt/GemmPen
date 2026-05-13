@@ -368,11 +368,24 @@ export function DocumentPanel({
     >
       <style>{`
         @media (max-width: 767px) {
+          .doc-panel-root {
+            height: auto !important;
+            overflow: visible !important;
+            min-height: 100%;
+          }
           .doc-panel-root .doc-scan-area {
             padding: 0.5rem 0.5rem 0 0.5rem !important;
+            flex: none !important;
+            height: 35vh !important;
           }
           .doc-panel-root .doc-transcript-area {
             padding: 0 0.5rem 0.5rem 0.5rem !important;
+            overflow: visible !important;
+            flex: none !important;
+          }
+          .doc-panel-root .doc-transcript-area > div:last-child {
+            overflow: visible !important;
+            min-height: auto !important;
           }
           .doc-panel-root .doc-drag-handle {
             padding: 0 0.5rem !important;

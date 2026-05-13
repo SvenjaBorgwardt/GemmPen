@@ -144,7 +144,15 @@ export function ReviewPanel({ studentSlug, studentName, feedbackItems }: ReviewP
     >
     <style>{`
       @media (max-width: 767px) {
+        .review-panel-root {
+          overflow: visible !important;
+          flex: none !important;
+          min-height: auto !important;
+        }
         .review-panel-root .review-panel-scroll {
+          overflow: visible !important;
+          flex: none !important;
+          min-height: auto !important;
           padding: 0.75rem 0.625rem !important;
           padding-bottom: 0.375rem !important;
         }
@@ -152,6 +160,9 @@ export function ReviewPanel({ studentSlug, studentName, feedbackItems }: ReviewP
           font-size: 1.125rem !important;
         }
         .review-panel-root .review-panel-footer {
+          position: sticky;
+          bottom: 0;
+          z-index: 5;
           padding: 0.5rem 0.625rem !important;
         }
         .review-panel-root .review-panel-footer a {
