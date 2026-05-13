@@ -170,7 +170,7 @@ export default function ClassOverviewPage() {
                     marginBottom: "0.375rem",
                   }}
                 >
-                  <span style={{ fontWeight: 600 }}>{cat.abbr}</span>
+                  <span style={{ fontWeight: 600 }}>{cat.label}</span>
                   <span style={{ color: "var(--text-muted)", fontSize: "0.6875rem" }}>
                     {cat.avg}/{cat.max}
                   </span>
