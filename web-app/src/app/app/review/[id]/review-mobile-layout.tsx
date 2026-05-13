@@ -126,7 +126,7 @@ export function ReviewMobileLayout({
           data-active={activeTab === "document"}
           onClick={() => setActiveTab("document")}
         >
-          Document
+          Transcript
         </button>
       </div>
 

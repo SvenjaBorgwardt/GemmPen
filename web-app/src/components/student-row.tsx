@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Student } from "@/lib/types";
+import { toGrade, GradingSystemId } from "@/lib/grading";
 
 const categoryShort: Record<string, string> = {
   grammar: "GRM",
@@ -43,11 +44,14 @@ const categoryColor: Record<string, string> = {
 
 const detailSlugs = new Set(["alex-m", "jordan-k", "casey-r"]);
 
-export function StudentRow({ student }: { student: Student }) {
+export function StudentRow({ student, gradingSystem = "nrw-15" }: { student: Student; gradingSystem?: GradingSystemId }) {
   const targetSlug = detailSlugs.has(student.slug) ? student.slug : "alex-m";
   const reviewHref = `/app/review/${targetSlug}`;
   const pdfHref = `/app/feedback/${targetSlug}`;
   const exHref = `/app/exercises/${targetSlug}`;
+
+  const pct = (student.gradePoints / 15) * 100;
+  const grade = toGrade(pct, gradingSystem);
 
   const ordered = categoryOrder
     .map((id) => student.categoryScores.find((s) => s.categoryId === id))
@@ -94,10 +98,10 @@ export function StudentRow({ student }: { student: Student }) {
             lineHeight: 1,
           }}
         >
-          {student.gradePoints}
+          {grade.label}
         </div>
         <div style={{ fontSize: "0.6875rem", color: "var(--text-muted)", marginTop: "2px" }}>
-          {student.gradeLetter}
+          {grade.sublabel ?? ""}
         </div>
       </td>
       <td

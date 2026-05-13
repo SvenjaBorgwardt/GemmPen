@@ -1,9 +1,10 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Nav } from "@/components/nav";
 import { StudentRow } from "@/components/student-row";
 import { students, classStats } from "@/lib/mock-data";
+import { getStoredGradingSystem, toGrade, GradingSystemId } from "@/lib/grading";
 
 type Filter = "all" | "reviewed" | "pending";
 type SortOption = "score-high" | "score-low" | "name" | "status";
@@ -18,6 +19,17 @@ const INSIGHT_CATEGORIES = [
 export default function ClassOverviewPage() {
   const [filter, setFilter] = useState<Filter>("all");
   const [sort, setSort] = useState<SortOption>("score-high");
+  const [gradingSystem, setGradingSystem] = useState<GradingSystemId>("nrw-15");
+
+  useEffect(() => {
+    setGradingSystem(getStoredGradingSystem());
+  }, []);
+
+  const avgDisplay = useMemo(() => {
+    if (gradingSystem === "nrw-15") return classStats.avgScore.toFixed(1);
+    const pct = (classStats.avgScore / 15) * 100;
+    return toGrade(pct, gradingSystem).label;
+  }, [gradingSystem]);
 
   const categoryAverages = useMemo(() => {
     const sums: Record<string, { total: number; count: number; max: number }> = {};
@@ -114,14 +126,14 @@ export default function ClassOverviewPage() {
           style={{ gap: "0.875rem", marginBottom: "1.5rem" }}
         >
           <StatCard num={classStats.totalStudents} label="Students" />
-          <StatCard num={classStats.avgScore} label="Avg. Score" decimal />
+          <StatCard display={avgDisplay} label="Avg. Score" />
           <StatCard num={classStats.reviewedCount} label="Reviewed" />
           <StatCard num={classStats.pendingCount} label="Pending" />
           <StatCard num={classStats.microAnalysesCount} label="Checks completed" title="Total sentence-level checks across all students: grammar patterns, vocabulary range, argument structure, and more." />
         </div>
 
         {/* Grade Distribution Dot Plot */}
-        <GradeDistribution students={students} avgScore={classStats.avgScore} />
+        <GradeDistribution students={students} avgScore={classStats.avgScore} gradingSystem={gradingSystem} />
 
         {/* Class Insights */}
         <div
@@ -293,7 +305,7 @@ export default function ClassOverviewPage() {
           </thead>
           <tbody>
             {visible.map((s) => (
-              <StudentRow key={s.id} student={s} />
+              <StudentRow key={s.id} student={s} gradingSystem={gradingSystem} />
             ))}
           </tbody>
         </table>
@@ -350,11 +362,13 @@ function StatCard({
   label,
   decimal,
   title,
+  display,
 }: {
-  num: number;
+  num?: number;
   label: string;
   decimal?: boolean;
   title?: string;
+  display?: string;
 }) {
   return (
     <div
@@ -376,7 +390,7 @@ function StatCard({
           lineHeight: 1,
         }}
       >
-        {decimal ? num.toFixed(1) : num}
+        {display ?? (decimal ? num!.toFixed(1) : num)}
       </div>
       <div
         style={{
@@ -463,9 +477,11 @@ const GRADE_BANDS = [
 function GradeDistribution({
   students: allStudents,
   avgScore,
+  gradingSystem,
 }: {
   students: typeof students;
   avgScore: number;
+  gradingSystem: GradingSystemId;
 }) {
   const distribution = useMemo(() => {
     const buckets: Record<number, number> = {};
@@ -571,7 +587,7 @@ function GradeDistribution({
           fill="var(--accent-gold, #B8860B)"
           fontFamily="var(--font-dm-sans, system-ui, sans-serif)"
         >
-          avg {avgScore.toFixed(1)}
+          avg {gradingSystem === "nrw-15" ? avgScore.toFixed(1) : toGrade((avgScore / 15) * 100, gradingSystem).label}
         </text>
 
         {/* Student dots */}
