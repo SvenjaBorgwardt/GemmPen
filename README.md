@@ -15,7 +15,7 @@ Submission for the [Gemma 4 Good Hackathon](https://www.kaggle.com/competitions/
 
 I am a teacher at a vocational school in Cologne, Germany. Every exam cycle, I grade over 240 handwritten English exams. For each one, I want to write individual feedback that cites specific passages, explains why a student lost points, and gives them exercises to improve. In practice, I never have time for that. Most students get a grade and nothing else.
 
-GemmPen is trained on real exam data from my classroom. I transcribed and graded 38 handwritten exams from two of my classes during the four-week hackathon window - that is the maximum I could include under Germany's strict data protection rules (GDPR), since every student's parents had to give written consent. But 38 exams do not mean 38 training examples. GemmPen's micro-task architecture breaks each exam into multiple independent scoring, analysis, and feedback tasks - producing 941 training pairs from those 38 source texts. No synthetic data was used. Every training pair comes from a real student's writing and a real teacher's grade.
+GemmPen is trained on real exam data from my classroom. I transcribed and graded 38 handwritten exams from two of my classes this exam period - every student's parents had to give written consent under Germany's data protection rules (GDPR). But 38 exams do not mean 38 training examples. GemmPen's micro-task architecture breaks each exam into multiple independent scoring, analysis, and feedback tasks - producing 941 training pairs from those 38 source texts. No synthetic data was used. Every training pair comes from a real student's writing and a real teacher's grade.
 
 In a normal school year, I grade over 240 exams per cycle across multiple classes. The pipeline is designed to scale: each new exam batch generates roughly 25 training pairs per student, and the teacher correction loop (DPO) continuously improves the model. The 38 exams in this submission are a starting point, not a ceiling.
 
@@ -215,17 +215,17 @@ npm install
 npm run dev
 ```
 
-**Recommended click path through the demo:**
+**Explore the demo - what to look for at each step:**
 
-```
-Landing  ->  Upload  ->  Configure  ->  Start AI Evaluation
-  ->  Review (Alex M.)  ->  Save & Next
-  ->  Review (Jordan K.)  ->  Save & Next
-  ->  Review (Casey R.)  ->  Save & Next
-  ->  Class Overview
-  ->  PDF Feedback (Alex M.)  ->  Print works
-  ->  Exercises (Alex M.)  ->  Try submitting answers
-```
+1. **Landing Page** - Scroll through the pipeline overview and the before/after comparison.
+2. **Upload** - Drag-and-drop interface with a privacy notice. The demo pre-loads three student exams.
+3. **Configure** - Pick a rubric preset or toggle individual categories. Try switching the grading system (German 0-15, US Letter, UK GCSE, Percentage) - the scores update across the entire app.
+4. **Class Overview** - All 21 students at a glance with score bars and status indicators.
+5. **Review (click any student)** - This is the core screen. Hover over the colored highlights in the transcript to see error tooltips. Notice how each feedback card cites specific sentences from the student's text. Try editing a feedback card - this is how teachers create DPO training pairs. Check the score breakdown at the top and try switching grading systems there.
+6. **Compare students** - Open Alex M., then Jordan K., then Casey R. Notice how the feedback adapts: different errors, different tone, different level of detail for each student.
+7. **Feedback (printer icon)** - Three-page printable report for the student: annotated text, detailed feedback, personalized exercises.
+8. **Exercises** - Try submitting an answer. The model gives hints without revealing the solution. Open exercises for different students and notice they are completely different, because each student made different mistakes.
+9. **Training** - The DPO export page shows how teacher corrections become training data. The progress bar starts at 8/30, showing this is a system that has already been used.
 
 ---
 
