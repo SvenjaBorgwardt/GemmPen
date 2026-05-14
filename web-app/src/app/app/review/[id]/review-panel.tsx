@@ -335,9 +335,9 @@ export function ReviewPanel({ studentSlug, studentName, feedbackItems }: ReviewP
             fontWeight: 600,
             padding: "0.625rem 1.5rem",
             borderRadius: "6px",
-            background: "var(--bg-body)",
-            border: "0.5px solid var(--border-color)",
-            color: "var(--text-primary)",
+            background: "var(--btn-primary)",
+            border: "0.5px solid var(--btn-primary)",
+            color: "var(--btn-primary-text)",
             textDecoration: "none",
             minHeight: "44px",
           }}
