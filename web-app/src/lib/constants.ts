@@ -51,7 +51,7 @@ export const CATEGORIES = {
 
 export type CategoryKey = keyof typeof CATEGORIES;
 
-// Mapping von CategoryScore.id auf die kurzen Review-Keys
+// Maps CategoryScore.id to the short review keys
 export const CATEGORY_FEEDBACK_MAP: Record<string, 'grammar' | 'structure' | 'vocab' | 'connectives'> = {
   grammar: 'grammar',
   sentenceStructure: 'structure',

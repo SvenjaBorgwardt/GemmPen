@@ -1,6 +1,7 @@
 {
-  "name": "web-app",
+  "name": "gemmpen",
   "version": "0.1.0",
+  "description": "AI-powered personalized student feedback - fine-tuned on Gemma 4",
   "private": true,
   "scripts": {
     "dev": "next dev",

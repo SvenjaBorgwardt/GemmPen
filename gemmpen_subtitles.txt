@@ -1,0 +1,19 @@
+Hi. My name is Svenja. I am a teacher in Germany. I teach English and Economics to 240 students, and most of my days I spend grading exams and drinking way too much coffee.
+
+But there is something that has been bothering me for years. Classrooms everywhere have 30, 40, sometimes 50 students. And every single one of them learns differently, makes different mistakes, and needs different help. But they all get the same thing: a grade. A number on a piece of paper. And that number tells them how they did, but it never tells them how to get better. I have 240 students. I grade their handwritten exams, and I can see exactly what each of them needs. But by the time I am done grading, the next round of exams is already on my desk. The students never hear what I saw in their work. They just get the number.
+
+So I decided to build a solution. I called it GemmPen. And I believe it can change education.
+
+GemmPen takes a handwritten exam, reads the handwriting, grades it, and then does something no teacher has ever had time to do: it sits down with every student individually. It quotes their own sentences back to them. It shows them exactly where they lost points and why.
+
+GemmPen runs on Google's new model Gemma 4, and I fine-tuned it with my latest student exams. What you see here is the feedback it generates. It finds patterns in the student's writing, highlights specific sentences, and adapts its language to the student's level. And then I had an idea: the model already knows exactly where each student struggles. So I built a system that takes those exact mistakes and turns them into personalized practice exercises. What you see here is that every student gets completely different exercises, because every student made different mistakes.
+
+And then it hit me: if this works for my class, I want to give this to every student on this planet.
+
+There are 70 million teachers in the world. And I promise you, every single one of them knows exactly the feeling I just described. GemmPen works with any subject, any language, any grading system. And here is the part I love most: when a teacher adjusts the model's feedback, the model learns from it. Every correction becomes a DPO training pair, and you basically fine-tune your own LoRA adapter with one click. And you do not have to be technical at all. The more teachers use it, the better it gets for their students.
+
+All you need is one device. No internet, no subscription. Student data stays in the classroom. That means this works everywhere. A school in rural India. A refugee camp. A classroom in my city.
+
+Look, I am a teacher from Germany who wanted to improve how her students get better through their feedback. GemmPen takes care of the grading so that teachers can finally focus on what they are actually here for: teaching, inspiring, and helping their students grow. And I truly believe that every student in the world deserves feedback that sees their individual strengths, understands their mistakes, and helps them grow. And I think I found a way to make that happen.
+
+This is GemmPen.

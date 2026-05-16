@@ -22,7 +22,7 @@ I am a teacher at a vocational school in Cologne, Germany. I teach 240 students.
 
 The time I spend grading is time I cannot spend on what would actually help them improve. GemmPen changes that. It takes the grading I already do and turns it into something my students can learn from: feedback that quotes their own writing, explains their error patterns, and gives them personalized exercises to practice. And I get back to doing what I became a teacher for: inspiring young people, helping them find their voice, showing them what they are capable of.
 
-GemmPen is trained on real exam data from my classroom. I used Gemma 4's built-in vision to transcribe 38 handwritten exams from two of my classes, manually corrected the transcriptions, and graded each one against my rubric. Every student is 18 or older and gave written consent for their data to be used - participation was voluntary with no effect on grades, and no student declined. But 38 exams do not mean 38 training examples. GemmPen's micro-task architecture breaks each exam into multiple independent scoring, analysis, and feedback tasks - producing 941 training pairs from those 38 source texts. No synthetic data was used. Every training pair comes from a real student's writing and a real teacher's grade.
+GemmPen is trained on real exam data from my classroom. I used Gemma 4's built-in vision to transcribe 38 handwritten exams from two of my classes, manually corrected the transcriptions, and graded each one against my rubric. Every student is 18 or older and gave written consent for their data to be used - participation was voluntary with no effect on grades, and no student declined. But 38 exams do not mean 38 training examples. GemmPen's micro-task architecture breaks each exam into multiple independent scoring, analysis, and feedback tasks - producing 883 training pairs from those 38 source texts. No synthetic data was used. Every training pair comes from a real student's writing and a real teacher's grade.
 
 The pipeline is designed to scale: each new exam batch generates roughly 25 training pairs per student, and the teacher correction loop continuously improves the model. The 38 exams in this submission are a starting point, not a ceiling.
 
@@ -107,11 +107,22 @@ Here is how it works:
 4. After roughly 30 corrections, one button triggers the training - GemmPen handles the rest.
 5. Next round: GemmPen sounds like the teacher.
 
-**What happens under the hood:** The correction pairs (AI version vs. teacher version) are short text snippets with no student names, grades, or original exam content. When the teacher presses the button, these pairs are the only data that leaves the device. The API route uploads them as a private dataset to Kaggle and triggers a pre-built training notebook on a free T4 GPU. The notebook runs for roughly 70 minutes and produces a personal LoRA adapter, which is published to HuggingFace. On the next session, GemmPen pulls the updated adapter automatically.
+**What happens under the hood:** Each correction creates a DPO preference pair: the original AI-generated feedback (rejected) and the teacher's edited version (chosen). These pairs are short text snippets containing no student names, grades, or original exam content.
 
-The API integration is built and included in the codebase (`/api/retrain`). GemmPen uses Kaggle's free GPU infrastructure as the training backend, so retraining runs on a free T4 without the teacher needing to configure anything. For the hackathon demo, the training loop is demonstrated with pre-computed results rather than triggered live. The production vision is a fully managed service where teachers press one button and GemmPen handles the round trip.
+When the teacher presses the training button, the pipeline works as follows:
 
-**What never leaves the device:** Student writing, transcriptions, scores, names, and original exams. The only data transmitted for training is a set of short text pairs showing how the teacher prefers to phrase feedback.
+1. The pairs are uploaded as a private Kaggle dataset via the built-in API route (`/api/retrain`)
+2. A pre-configured Kaggle notebook is triggered on a free T4 GPU
+3. The notebook loads Gemma 4 E4B in 4-bit quantization with the existing SFT adapter merged into the base weights (this merged checkpoint becomes the reference model for DPO)
+4. A new LoRA adapter (r=8) is trained on top using TRL's DPOTrainer with Unsloth memory optimization - the reference model shares the quantized weights and simply has no active LoRA, which keeps the memory footprint under 10 GB on a 16 GB T4
+5. The resulting adapter is pushed to a private HuggingFace repository
+6. On the next session, GemmPen pulls the updated adapter automatically
+
+Training runs for approximately 60-90 minutes. The teacher's 30+ pairs are sufficient for style alignment because DPO is not teaching a new capability here - the model already knows how to score and explain from the SFT stage (883 pairs). DPO only shifts phrasing preferences within the existing task distribution, which requires far fewer examples than general alignment.
+
+**Current state:** The API integration for triggering this pipeline is built and included in the codebase. The SFT training infrastructure (Unsloth + LoRA on Kaggle T4) is proven - it produced the current adapter from 883 pairs. The DPO extension reuses the same stack with TRL's DPOTrainer added. For the hackathon demo, the training loop is demonstrated with pre-computed results. The next iteration will close the loop end-to-end.
+
+**What never leaves the device:** Student writing, transcriptions, scores, names, and original exams. The only data transmitted is a set of short preference pairs showing how the teacher phrases feedback differently from the model. These are pedagogical style preferences, not student data.
 
 This creates a closed loop: students write, the model evaluates, the teacher corrects, the model learns. Over time, GemmPen adapts to each teacher's voice and standards.
 
@@ -135,7 +146,7 @@ GemmPen is fine-tuned on Gemma 4 E4B using LoRA, trained on a free Kaggle T4 GPU
 |-----------|-------|
 | Base model | Gemma 4 E4B (multimodal, ~5B parameters) |
 | Method | LoRA (r=8, alpha=8), 4-bit quantized |
-| Training pairs | 941 (883 original + 58 data-balanced) |
+| Training pairs | 883 |
 | Source | Real handwritten student exams, teacher-graded |
 | Epochs | 3 |
 | Platform | Kaggle T4 GPU (free tier) |
