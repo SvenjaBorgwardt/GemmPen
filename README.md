@@ -13,13 +13,13 @@ Submission for the [Gemma 4 Good Hackathon](https://www.kaggle.com/competitions/
 
 ## The Problem
 
-I am a teacher at a vocational school in Cologne, Germany. Every exam cycle, I grade over 240 handwritten English exams. For each one, I want to write individual feedback that cites specific passages, explains why a student lost points, and gives them exercises to improve. In practice, I never have time for that. Most students get a grade and nothing else.
+I am a teacher at a vocational school in Cologne, Germany. Every exam cycle, I grade over 240 handwritten English exams. For each one, I want to write individual feedback that cites specific passages, explains why a student lost points, and gives them exercises to improve. In practice, I never have time for that. Most students get a grade and nothing else. They never find out which specific mistakes held them back or what they could do differently next time. And I never get to do the part of teaching that actually matters: sitting with a student, showing them how far they have come, and helping them see what they are capable of.
 
 GemmPen is trained on real exam data from my classroom. I transcribed and graded 38 handwritten exams from two of my classes this exam period - every student's parents had to give written consent under Germany's data protection rules (GDPR). But 38 exams do not mean 38 training examples. GemmPen's micro-task architecture breaks each exam into multiple independent scoring, analysis, and feedback tasks - producing 941 training pairs from those 38 source texts. No synthetic data was used. Every training pair comes from a real student's writing and a real teacher's grade.
 
 In a normal school year, I grade over 240 exams per cycle across multiple classes. The pipeline is designed to scale: each new exam batch generates roughly 25 training pairs per student, and the teacher correction loop (DPO) continuously improves the model. The 38 exams in this submission are a starting point, not a ceiling.
 
-This is not a research demo. It is a tool I built because I need it.
+This is not a research demo. It is a tool I built because I need it, and because I know teachers everywhere face the same problem. Every hour we spend counting points is an hour we are not spending with our students. I became a teacher to inspire young people, to help them find their voice, to show them what they are capable of. GemmPen exists so that teachers can get back to doing exactly that.
 
 ---
 
@@ -242,6 +242,6 @@ npm run dev
 
 ---
 
-Built by [Svenja Borgwardt](https://github.com/SvenjaBorgwardt) - English teacher at a vocational school in Cologne, Germany, and the person who grades these exams.
+Built by [Svenja Borgwardt](https://github.com/SvenjaBorgwardt) - English teacher at a vocational school in Cologne, Germany. I built GemmPen because I believe every student deserves to know not just their score, but what they did well and how to get better. And because every teacher deserves the time to tell them.
 
 Powered by [Gemma 4](https://ai.google.dev/gemma) from Google DeepMind.
