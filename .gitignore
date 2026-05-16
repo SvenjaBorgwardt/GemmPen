@@ -29,6 +29,15 @@ Exam4/
 iaf31_*.pdf
 iaf32_*.pdf
 
+# Media/assets (live on YouTube, Kaggle, HuggingFace)
+*.wav
+*.mp4
+gemmpen-youtube-standbild.png
+gemmpen-kaggle-thumbnail.png
+gemmpen_subtitles.txt
+gemmpen-logo-full.png
+huggingface_README.md
+
 # Local-only project files
 _archive/
 archive/
