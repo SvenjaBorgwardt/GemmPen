@@ -18,9 +18,11 @@ Submission for the [Gemma 4 Good Hackathon](https://www.kaggle.com/competitions/
 
 ## The Problem
 
-I am a teacher at a vocational school in Cologne, Germany. Every exam cycle, I grade over 240 handwritten English exams - at least four cycles per year, plus homework assignments. For each one, I want to write individual feedback that cites specific passages, explains why a student lost points, and gives them exercises to improve. In practice, I never have time for that. Most students get a grade and nothing else. They never find out which specific mistakes held them back or what they could do differently next time. And I never get to do the part of teaching that actually matters: sitting with a student, showing them how far they have come, and helping them see what they are capable of.
+I am a teacher at a vocational school in Cologne, Germany. I teach 240 students. Each of them writes at least four exams per year - over 960 handwritten texts, plus homework. Grading each one takes 20-30 minutes: reading, scoring, documenting. That is the job, and I do it. But when I am done, my students get a number. Not an explanation of what went well. Not a breakdown of which patterns are holding them back. Not an exercise that targets their specific mistakes. Just a grade.
 
-GemmPen is trained on real exam data from my classroom. I transcribed and graded 38 handwritten exams from two of my classes this exam period - every student's parents had to give written consent under Germany's data protection rules (GDPR). But 38 exams do not mean 38 training examples. GemmPen's micro-task architecture breaks each exam into multiple independent scoring, analysis, and feedback tasks - producing 941 training pairs from those 38 source texts. No synthetic data was used. Every training pair comes from a real student's writing and a real teacher's grade.
+The time I spend grading is time I cannot spend on what would actually help them improve. GemmPen changes that. It takes the grading I already do and turns it into something my students can learn from: feedback that quotes their own writing, explains their error patterns, and gives them personalized exercises to practice. And I get back to doing what I became a teacher for: inspiring young people, helping them find their voice, showing them what they are capable of.
+
+GemmPen is trained on real exam data from my classroom. I used Gemma 4's built-in vision to transcribe 38 handwritten exams from two of my classes, manually corrected the transcriptions, and graded each one against my rubric. Every student is 18 or older and gave written consent for their data to be used - participation was voluntary with no effect on grades, and no student declined. But 38 exams do not mean 38 training examples. GemmPen's micro-task architecture breaks each exam into multiple independent scoring, analysis, and feedback tasks - producing 941 training pairs from those 38 source texts. No synthetic data was used. Every training pair comes from a real student's writing and a real teacher's grade.
 
 The pipeline is designed to scale: each new exam batch generates roughly 25 training pairs per student, and the teacher correction loop continuously improves the model. The 38 exams in this submission are a starting point, not a ceiling.
 
@@ -75,7 +77,7 @@ GemmPen is designed so that a teacher's access to quality feedback tools does no
 
 **Language-agnostic by design.** The rubric is a JSON parameter, not embedded in the model. A teacher grading English essays in Cologne and a teacher grading Swahili compositions in Nairobi use the same system with different configurations. Adding a new language or subject requires only a new rubric - not a new model.
 
-**No technical knowledge required.** Teachers interact through a visual interface: upload, review, correct. Even the personalization loop (training the model on individual feedback style) requires only clicking an export button and running a pre-built Kaggle notebook. The entire workflow is designed for educators, not engineers.
+**No technical knowledge required.** Teachers interact through a visual interface: upload, review, correct. Even the personalization loop (training the model on individual feedback style) requires only clicking one button - GemmPen handles the training automatically. The entire workflow is designed for educators, not engineers.
 
 ---
 
@@ -100,15 +102,16 @@ GemmPen works immediately without any customization. But teachers who want the m
 Here is how it works:
 
 1. A teacher uses GemmPen normally, reviewing AI-generated feedback for their students.
-2. When a feedback point does not sound right, they edit it directly in the review interface.
-3. GemmPen stores these corrections as training pairs locally in the browser.
-4. After roughly 30 corrections, a single button exports the pairs as a JSONL file.
-5. One training run on Kaggle (free GPU) produces a personal LoRA adapter.
-6. Next round: GemmPen sounds like the teacher.
+2. When a feedback point does not match their judgment, they edit it directly in the review interface.
+3. GemmPen stores these corrections as training pairs locally on the device.
+4. After roughly 30 corrections, one button triggers the training - GemmPen handles the rest.
+5. Next round: GemmPen sounds like the teacher.
 
-**What gets uploaded for training:** Only the training pairs (AI feedback vs. teacher correction). These are short text snippets without student names, grades, or original exam content. The export format is deliberately minimal.
+**What happens under the hood:** The correction pairs (AI version vs. teacher version) are short text snippets with no student names, grades, or original exam content. When the teacher presses the button, these pairs are the only data that leaves the device. The API route uploads them as a private dataset to Kaggle and triggers a pre-built training notebook on a free T4 GPU. The notebook runs for roughly 70 minutes and produces a personal LoRA adapter, which is published to HuggingFace. On the next session, GemmPen pulls the updated adapter automatically.
 
-**What never leaves the device:** Student writing, transcriptions, scores, names, and original exams. None of this is included in the export.
+The API integration is built and included in the codebase (`/api/retrain`). GemmPen uses Kaggle's free GPU infrastructure as the training backend, so retraining runs on a free T4 without the teacher needing to configure anything. For the hackathon demo, the training loop is demonstrated with pre-computed results rather than triggered live. The production vision is a fully managed service where teachers press one button and GemmPen handles the round trip.
+
+**What never leaves the device:** Student writing, transcriptions, scores, names, and original exams. The only data transmitted for training is a set of short text pairs showing how the teacher prefers to phrase feedback.
 
 This creates a closed loop: students write, the model evaluates, the teacher corrects, the model learns. Over time, GemmPen adapts to each teacher's voice and standards.
 
@@ -152,14 +155,14 @@ A side-by-side comparison of base Gemma 4 vs. fine-tuned GemmPen, evaluated on a
 | Metric | Base Gemma 4 | Fine-tuned GemmPen |
 |--------|-------------|-------------------|
 | Output length | 89% under 400 characters | 3x longer on average |
-| Specificity | Generic, same schema every time | Cites 2-4 specific passages per student |
-| Adaptation | Same tone regardless of level | Adjusts language to student proficiency |
+| Specificity | General feedback, consistent structure | Cites 2-4 specific passages per student |
+| Adaptation | Uniform tone across levels | Adjusts language to student proficiency |
 | Error patterns | Lists individual errors | Identifies recurring patterns, explains why they matter |
 | Exercises | None | Personalized practice based on individual weaknesses |
 
 The fine-tuned model produces feedback that is longer, more specific, and adapts to each student's proficiency level - exactly the qualities that make feedback effective according to educational research.
 
-The DPO pipeline (see "It Grows With You") addresses remaining edge cases where the model over-explains rather than guiding. Each teacher correction becomes a training signal, so this improves continuously with use.
+A central goal of the fine-tuning was teaching the model when to guide and when to correct directly. When a student writes "there" instead of "their," showing the correct spelling is the right call. But when a student writes "the company can helps," the model should point to the pattern and let the student find the fix. The fine-tuned model learned exactly this distinction: in evaluation, it makes the correct pedagogical decision in 84% of cases (32 of 38 students), including the hardest judgment call - knowing when to show the answer and when to guide. The remaining cases are caught during the teacher review step, and each correction feeds into the DPO pipeline (see "It Grows With You") for continuous improvement.
 
 ---
 
@@ -181,7 +184,7 @@ The training notebook and datasets live on Kaggle (linked above). This repo cont
 
 ## Future Work
 
-**Vision fine-tuning for handwriting.** GemmPen currently uses Gemma 4's built-in multimodal capabilities to read handwriting. A dedicated fine-tuning pass on exam handwriting would improve recognition of crossed-out text, margin notes, and difficult handwriting styles. The architecture supports this - Gemma 4 E4B includes a 16-layer Vision Transformer that can be fine-tuned with LoRA, and scanned exam pages are available as training data.
+**Vision fine-tuning for handwriting.** GemmPen already uses Gemma 4's built-in vision to transcribe handwritten exams. The teacher corrections from this process - comparing the raw transcription to the corrected version - are a natural source of training pairs for a dedicated vision fine-tuning pass. This would improve recognition of crossed-out text, margin notes, and difficult handwriting styles. The data already exists from the current workflow; we did not get to this fine-tuning step within the hackathon timeline.
 
 **DPO-based personalization at scale.** The teacher correction loop described in "It Grows With You" collects preference pairs that can be used for Direct Preference Optimization. As more teachers use the system, each builds their own personalized adapter - creating a model that reflects their individual teaching philosophy and standards.
 

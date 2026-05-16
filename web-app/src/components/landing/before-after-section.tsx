@@ -278,7 +278,7 @@ export function BeforeAfterSection() {
         {activeTab === 0 && (
           <>
             <strong style={{ fontWeight: 600, color: "var(--text-primary)" }}>The difference: </strong>
-            The base model lists categories. The fine-tuned model finds one repeating pattern,
+            The base model identifies the category. The fine-tuned model finds one repeating pattern,
             quotes the student&apos;s own text, and asks a question instead of giving the answer.
             Fix one rule, fix four errors.
           </>
@@ -286,7 +286,7 @@ export function BeforeAfterSection() {
         {activeTab === 1 && (
           <>
             <strong style={{ fontWeight: 600, color: "var(--text-primary)" }}>The difference: </strong>
-            The base model says &ldquo;some arguments need more evidence.&rdquo; The fine-tuned model
+            The base model flags the issue. The fine-tuned model
             shows <em>which</em> argument, <em>what</em> is not yet there, and asks the student to
             complete it, turning a vague comment into a concrete task.
           </>
@@ -294,7 +294,7 @@ export function BeforeAfterSection() {
         {activeTab === 2 && (
           <>
             <strong style={{ fontWeight: 600, color: "var(--text-primary)" }}>The difference: </strong>
-            The base model gives identical advice to a 4/15 and an 11/15 student. The fine-tuned
+            The base model gives the same structure to every student. The fine-tuned
             model is direct with struggling students (no fake praise) and shows strong students the
             exact upgrade path to the next level.
           </>
