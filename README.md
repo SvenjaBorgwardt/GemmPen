@@ -186,4 +186,4 @@ Training code and datasets live on [Kaggle](https://www.kaggle.com/code/svenjabo
 
 Powered by [Gemma 4](https://ai.google.dev/gemma) from Google DeepMind.
 
-Built by [Svenja Borgwardt](https://github.com/SvenjaBorgwardt) - English teacher at a vocational school in Cologne, Germany. I built GemmPen because I believe every student deserves to know not just their score, but what they did well and how to get better.
+Built by [Svenja Borgwardt](https://github.com/SvenjaBorgwardt) - English adn Economics teacher at a vocational school in Cologne, Germany. I built GemmPen because I believe every student deserves to know not just their score, but what they did well and how to get better.
