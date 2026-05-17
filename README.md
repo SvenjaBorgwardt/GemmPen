@@ -66,7 +66,7 @@ multimodal    fine-tuned     fine-tuned     per prompt       per prompt
 | Method | LoRA (r=8), 4-bit quantized via Unsloth |
 | Training pairs | 883 (from 38 real handwritten exams) |
 | Source | Real student writing, teacher-graded. No synthetic data. |
-| Training time | ~70 minutes on a free Kaggle T4 GPU |
+| Training time | ~70 minutes on a free Kaggle T4 x2 |
 | Consent | All students 18+, written consent, voluntary participation |
 
 The micro-task architecture breaks each exam into independent scoring, analysis, and feedback tasks - producing 883 training pairs from 38 source texts. Three core tasks: error analysis with rubric alignment (KT1), argument structure validation (KT2), and feedback generation with explainable scoring (KT3).
