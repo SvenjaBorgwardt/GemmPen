@@ -38,7 +38,7 @@ multimodal    fine-tuned     fine-tuned     per prompt       per prompt
 
 **Scan** - The teacher photographs a handwritten exam. Gemma 4 reads it directly using built-in vision.
 
-**Evaluate** - Scores against the teacher's rubric (passed as JSON configuration - any rubric, any subject, any language). Every score is grounded with quoted evidence from the student's text.
+**Evaluate** - Scores against the teacher's rubric (passed as JSON configuration, so rubric, subject and language are all configurable; see [Tested scope and limitations](#tested-scope-and-limitations) for what has actually been validated). Every score is grounded with quoted evidence from the student's text.
 
 **Feedback** - Up to 6 feedback points per student, adapted to their proficiency level. Quotes specific passages, explains patterns, never reveals the correct answer.
 
@@ -52,7 +52,7 @@ multimodal    fine-tuned     fine-tuned     per prompt       per prompt
 
 **Data never leaves the classroom.** Student writing, grades, and feedback stay on the teacher's device. No cloud, no server, no account. Privacy by architecture, not by policy.
 
-**Any classroom in the world.** One device that can run Gemma 4 - including a phone. No internet, no subscription, no API costs. The interface is fully mobile-responsive.
+**Any classroom in the world.** One device that can run Gemma 4, no internet, no subscription, no API costs. The tested setup is a laptop or desktop running the app locally with Ollama. The interface is mobile-responsive, and phone-local inference is plausible with a model this small, though it is untested and there is no native mobile app.
 
 **Teachers stay in control.** Open weights, no vendor lock-in, no dependency on services that might shut down.
 
@@ -104,6 +104,33 @@ No student data is ever transmitted - only short pedagogical style preferences (
 
 ---
 
+## Tested scope and limitations
+
+GemmPen has been validated in one setting: English writing instruction with
+German vocational IT students at B1/B2 level, marked against my own rubrics.
+
+The architecture treats language and subject as configuration rather than
+assumptions, and subjects that are graded against explicit criteria should
+transfer with little friction. Beyond the one tested setting, treat the breadth
+as untested rather than proven:
+
+- **Languages** - Tested in English. Output quality in other languages follows
+  Gemma 4's own coverage and has not been measured here.
+- **Subjects** - Tested in English writing. Economics and similar
+  argument-based subjects sit in the middle: rubric scoring holds up, while
+  subtly flawed reasoning is harder to catch.
+- **Out of scope** - Mathematics, law and other formal domains, where a single
+  missed error flips the verdict.
+- **Handwriting recognition** - Tested on scans from one scanner and one
+  cohort. Unusual handwriting, pencil, and poor scan quality degrade results.
+- **Deployment** - Tested as a local web app plus Ollama on laptops and
+  desktops. Phone-local inference remains untested.
+
+Every piece of feedback is a draft for the teacher to review, and the whole
+design rests on that review step.
+
+---
+
 ## Getting Started
 
 **If you want to see the face behind all this:** [youtu.be/IeDM1mJ3J2M](https://youtu.be/IeDM1mJ3J2M)
@@ -137,7 +164,10 @@ npm run dev
 ## What to Look For in the Demo
 
 - **Landing Page** - Pipeline overview and before/after comparison.
-- **Upload** - Drag-and-drop with privacy notice. Three student exams pre-loaded.
+- **Upload** - Drag-and-drop with privacy notice. Three exams pre-loaded. These
+  three scans were written by adult volunteers specifically for this demo, so
+  the public repo carries no student work. The training data described above is
+  separate, stayed on my own machine, and was never published.
 - **Configure** - Rubric presets, category toggles. Try switching grading systems (German 0-15, US Letter, UK GCSE, Percentage) - scores update across the entire app.
 - **Class Overview** - All 21 students with score bars and status indicators.
 - **Review** (click any student) - Hover over colored highlights for error tooltips. Notice how each feedback card cites specific sentences. Try editing a card - this is how DPO training pairs are created.
@@ -186,4 +216,4 @@ Training code and datasets live on [Kaggle](https://www.kaggle.com/code/svenjabo
 
 Powered by [Gemma 4](https://ai.google.dev/gemma) from Google DeepMind.
 
-Built by [Svenja Borgwardt](https://github.com/SvenjaBorgwardt) - English adn Economics teacher at a vocational school in Cologne, Germany. I built GemmPen because I believe every student deserves to know not just their score, but what they did well and how to get better.
+Built by [Svenja Borgwardt](https://github.com/SvenjaBorgwardt) - English and Economics teacher at a vocational school in Cologne, Germany. I built GemmPen because I believe every student deserves to know not just their score, but what they did well and how to get better.

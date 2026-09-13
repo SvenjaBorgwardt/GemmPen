@@ -41,6 +41,26 @@ export function HeroSection() {
       >
         No internet. No cloud. No student data leaves the classroom.
       </p>
+      <p
+        className="mb-5 md:mb-10"
+        style={{
+          fontSize: "0.8125rem",
+          color: "var(--text-muted)",
+          lineHeight: 1.6,
+          maxWidth: "620px",
+        }}
+      >
+        This site is a walkthrough with prepared sample data, so you can click
+        through the whole pipeline without downloading a model. The build that
+        runs on your own machine lives at{" "}
+        <a
+          href="https://github.com/SvenjaBorgwardt/gemmpen-teacher"
+          style={{ color: "inherit", textDecoration: "underline" }}
+        >
+          gemmpen-teacher
+        </a>
+        .
+      </p>
     </>
   );
 }
@@ -70,10 +90,10 @@ export function CtaButton() {
 
 export function BadgeRow() {
   const items = [
-    "Runs offline",
-    "Works on mobile",
-    "Any language",
-    "Any subject",
+    "Runs offline after a one-time download",
+    "Runs on your own laptop",
+    "Language-agnostic by design",
+    "Tested in English writing",
     "Data stays on your device",
     "Free to use",
   ];
